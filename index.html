@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kyle Olson — Refinance Analysis | NEO Home Loans</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A2540;--blue:#5bcbf5;--dark:#2b2f2e;--white:#fff;
+  --bg:#0d1b2a;--bg2:#111e2e;--bg3:#152638;--bg4:#1a2f45;
+  --border:#1e3550;--border2:#264562;--text:#e2eaf2;--muted:#7b96b0;
+  --card:#0f2035;--card2:#13273d;
+  --green:#22c55e;--green-bg:rgba(34,197,94,.15);--green-b:rgba(34,197,94,.35);
+  --amber:#f59e0b;--amber-bg:rgba(245,158,11,.15);--amber-b:rgba(245,158,11,.4);
+  --red:#ef4444;--red-bg:rgba(239,68,68,.15);--red-b:rgba(239,68,68,.35);
+  --purple:#a78bfa;--purple-bg:rgba(167,139,250,.15);--purple-b:rgba(167,139,250,.35);
+  --teal:#2dd4bf;--teal-bg:rgba(45,212,191,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);font-size:11px}
+
+/* HEADER */
+.hdr{background:var(--navy);padding:18px 28px 14px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:4px solid var(--blue)}
+.hdr-left h1{font-weight:800;font-size:17px;color:#fff}
+.hdr-left p{font-weight:200;font-size:10px;color:var(--blue);margin-top:3px;letter-spacing:.8px;text-transform:uppercase}
+.neo-logo{font-weight:800;font-size:10px;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-top:6px}
+.hdr-right{display:flex;align-items:flex-end;gap:12px}
+.hdr-right .sub{font-size:9px;color:#94a3b8;margin-top:2px;font-weight:200}
+.print-btn{background:var(--blue);color:var(--navy);border:none;padding:7px 16px;border-radius:5px;font-family:'Montserrat',sans-serif;font-weight:800;font-size:10px;cursor:pointer;letter-spacing:.5px;white-space:nowrap}
+.print-btn:hover{background:#3ab8e8}
+
+/* ASSUMPTIONS BARS */
+.abar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 28px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.abar.lender-bar{background:var(--bg3);border-bottom:2px solid var(--border2)}
+.abar.prop-bar{background:var(--bg2)}
+.ag{display:flex;align-items:center;gap:6px}
+.ag label{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.ai{background:var(--amber-bg);border:1.5px solid var(--amber-b);border-radius:4px;padding:3px 8px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:#fbbf24;width:85px;text-align:right;outline:none}
+.ai:focus{border-color:var(--amber);background:rgba(245,158,11,.25)}
+.ai.wide{width:105px}
+.ai.narrow{width:70px}
+.adiv{width:1px;height:22px;background:var(--border);flex-shrink:0}
+.bar-title{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;white-space:nowrap}
+.bar-title.blue{color:var(--blue)}
+.bar-title.muted{color:var(--muted)}
+
+/* LENDER RATE CARDS */
+.lender-cards{display:flex;gap:10px;align-items:stretch}
+.lc{background:var(--bg4);border:1.5px solid var(--border2);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px;min-width:170px}
+.lc.acra{border-color:#3b82f6;background:rgba(59,130,246,.12)}
+.lc.lendsure{border-color:#22c55e;background:rgba(34,197,94,.1)}
+.lc.clearedge{border-color:#a78bfa;background:rgba(167,139,250,.12)}
+.lc-name{font-size:10px;font-weight:800;color:#fff;min-width:72px}
+.lc-rate{background:transparent;border:none;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;color:#93c5fd;width:60px;text-align:right;outline:none;padding:0}
+.lc.lendsure .lc-rate{color:#6ee7b7}
+.lc.clearedge .lc-rate{color:#c4b5fd}
+.lc-pct{font-size:10px;font-weight:600;color:var(--muted)}
+.lc-note{font-size:8px;color:#7b96b0;margin-top:2px;font-style:italic}
+
+/* CONTENT */
+.content{padding:16px 28px 32px}
+
+/* SUMMARY STRIP */
+.summary-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px}
+.ss{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:11px 13px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.ss-label{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px}
+.ss-val{font-size:18px;font-weight:800;color:#e2eaf2;line-height:1}
+.ss-val.green{color:var(--green)}
+.ss-val.blue{color:#0369a1}
+.ss-val.purple{color:var(--purple)}
+.ss-val.amber{color:var(--amber)}
+.ss-sub{font-size:8.5px;color:var(--muted);margin-top:3px}
+
+/* SECTION LABEL */
+.slbl{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.slbl::after{content:'';flex:1;height:1px;background:var(--border2)}
+
+/* TABLE */
+#sectionRow{height:22px}
+#colHdrs th{height:52px;max-height:52px}
+.tw{overflow-x:scroll;-webkit-overflow-scrolling:touch;border-radius:10px;border:1px solid var(--border2);box-shadow:0 2px 14px rgba(0,0,0,.4);background:var(--card);margin-bottom:22px;cursor:grab}
+table{border-collapse:collapse;width:100%}
+#mainTable{min-width:2500px}
+th{padding:4px 6px 5px;font-size:8px;font-weight:700;text-align:center;border-right:1px solid rgba(255,255,255,.12);white-space:normal;vertical-align:bottom;line-height:1.3;overflow:hidden}
+td{padding:7px 8px;vertical-align:middle;border-right:1px solid var(--border);border-bottom:1px solid var(--border);text-align:right;font-size:11px;color:var(--text)}
+td:last-child,th:last-child{border-right:none}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:rgba(91,203,245,.06)}
+tbody tr:hover td.stk{background:var(--bg4)}
+tr.tot-row td{background:var(--navy);color:#fff;font-weight:700;border-top:2px solid var(--blue);border-bottom:none}
+
+/* STICKY COL */
+.stk{position:sticky;left:0;background:var(--card);z-index:3;border-right:2px solid var(--border2)!important;min-width:168px;max-width:168px;text-align:left!important}
+thead .stk{z-index:5}
+.shdr .stk{z-index:5}
+tr.tot-row .stk{background:var(--navy)}
+
+/* REFI CHECKBOX */
+.refi-check{
+  width:16px;height:16px;border-radius:4px;border:2px solid var(--border2);
+  background:var(--bg4);cursor:pointer;flex-shrink:0;
+  appearance:none;-webkit-appearance:none;outline:none;
+  transition:background .12s,border-color .12s;margin-top:1px;
+}
+.refi-check:checked{
+  background:var(--green);border-color:var(--green);
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 10 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4l2.5 2.5L9 1' stroke='%23fff' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:center;background-size:10px;
+}
+.prop-inactive td{opacity:.38;transition:opacity .15s}
+.prop-inactive .stk{opacity:.38}
+/* PROPERTY CELL */
+.paddr{font-weight:700;color:var(--blue);font-size:11px;line-height:1.3}
+.pentity{font-size:9px;color:#3b82f6;font-weight:600;margin-top:2px}
+.ppptag{display:inline-block;background:var(--amber-bg);color:#92400e;font-size:8px;font-weight:700;padding:1px 5px;border-radius:10px;margin-top:2px}
+
+/* INPUTS */
+.ci{background:rgba(34,197,94,.1);border:1px dashed rgba(34,197,94,.4);border-radius:4px;padding:3px 6px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:#86efac;text-align:right;outline:none;width:100%}
+.ci:focus{border:1.5px solid var(--green);background:rgba(34,197,94,.18)}
+.ci.rate{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.4);color:#fbbf24}
+.ci.rate:focus{border-color:var(--amber);background:rgba(245,158,11,.2)}
+.ci.co{background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.4);color:#c4b5fd}
+.ci.co:focus{border-color:var(--purple);background:rgba(167,139,250,.2)}
+.ci.rent{background:rgba(91,203,245,.1);border-color:rgba(91,203,245,.35);color:#7dd3fc}
+.ci.rent:focus{border-color:var(--blue);background:rgba(91,203,245,.18)}
+.ci.cred{background:rgba(110,231,183,.1);border-color:rgba(110,231,183,.4);color:#6ee7b7}
+.ci.cred:focus{border-color:var(--green);background:rgba(110,231,183,.18)}
+
+/* LENDER SELECT */
+.lsel{background:rgba(59,130,246,.2);border:1.5px solid rgba(91,203,245,.5);border-radius:4px;padding:4px 6px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;color:#5bcbf5;outline:none;width:100%;cursor:pointer}
+.lsel.ls{background:rgba(34,197,94,.18);border-color:rgba(110,231,183,.55);color:#4ade80;font-weight:800}
+.lsel.ce{background:rgba(167,139,250,.18);border-color:rgba(196,181,253,.5);color:#c4b5fd;font-weight:800}
+
+/* CHOICE BUTTONS */
+.cg{display:flex;gap:3px;justify-content:center}
+.cb{padding:4px 8px;border:1.5px solid var(--border);border-radius:4px;background:#fff;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .12s;white-space:nowrap}
+.cb:hover{border-color:var(--blue);color:var(--navy)}
+.cb.act-roll{background:var(--navy);color:#fff;border-color:var(--navy)}
+.cb.act-co{background:var(--purple);color:#fff;border-color:var(--purple)}
+.cb.act-tbl{background:var(--teal);color:#fff;border-color:var(--teal)}
+.cb:disabled{opacity:.35;cursor:not-allowed}
+
+/* CALC VALUES */
+.cv{font-weight:600;color:var(--text)}
+.cv.pos{color:var(--green);font-weight:700}
+.cv.neg{color:var(--red);font-weight:700}
+.cv.hi{color:#93c5fd;font-weight:700}
+.cv.dim{color:var(--muted);font-weight:400}
+.cv.comp-c{color:#38bdf8;font-weight:700}
+.cv.warn{color:var(--amber);font-weight:700}
+.cv.purple{color:var(--purple);font-weight:700}
+
+/* DSCR */
+.dn{font-weight:800;font-size:12px}
+.d-str{color:var(--green)}
+.d-pass{color:#0369a1}
+.d-thin{color:var(--amber)}
+.d-fail{color:var(--red)}
+.sbadge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:8.5px;font-weight:700}
+.sb-str{background:var(--green-bg);color:#166534}
+.sb-pass{background:#dbeafe;color:#1e40af}
+.sb-thin{background:var(--amber-bg);color:#92400e}
+.sb-fail{background:var(--red-bg);color:#991b1b}
+
+/* 5-YEAR */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.proj-card{background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+.proj-hdr{background:var(--navy);padding:11px 16px}
+.proj-hdr h3{font-weight:800;font-size:11px;color:var(--blue)}
+.proj-hdr p{font-weight:200;font-size:9.5px;color:#94a3b8;margin-top:2px}
+.pt{width:100%;border-collapse:collapse;font-size:11px}
+.pt th{background:var(--bg4);padding:7px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);text-align:right;border-bottom:1px solid var(--border2)}
+.pt th:first-child{text-align:left}
+.pt td{padding:8px 12px;border-bottom:1px solid var(--border);text-align:right;font-weight:600;color:var(--text)}
+.pt td:first-child{text-align:left;color:var(--muted);font-weight:400}
+.pt tr:last-child td{border-bottom:none}
+.pt tr.yr5 td{background:rgba(34,197,94,.12);color:#4ade80;font-weight:700;border-top:1px solid rgba(34,197,94,.3)}
+.pt .empty td{text-align:center;color:var(--muted);padding:20px;font-style:italic;font-weight:400;background:var(--card)}
+
+/* DEPLOY ROW */
+.deploy-row{display:flex;align-items:center;gap:12px;background:var(--card2);border:1px solid var(--border2);border-radius:8px;padding:11px 16px;margin-bottom:18px;flex-wrap:wrap}
+.deploy-row label{font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.deploy-row .ai{width:75px}
+.deploy-note{font-size:9.5px;color:var(--muted);font-style:italic}
+
+/* DISCLAIMER */
+.disclaimer{font-size:9px;color:#4b6780;font-style:italic;padding:10px 0 4px}
+
+@media print{
+  /* ── PAGE SETUP ─────────────────────────────────────────── */
+  @page{margin:0.5in 0.55in;size:letter landscape}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;box-sizing:border-box}
+
+  /* ── RESET TO WHITE PAPER ────────────────────────────────── */
+  html,body{
+    background:#fff!important;
+    color:#1a2332!important;
+    font-family:'Montserrat',Arial,sans-serif!important;
+    font-size:10.5px!important;
+    line-height:1.5!important;
+    width:100%!important;
+    margin:0!important;padding:0!important;
+  }
+
+  /* ── HIDE EVERYTHING INTERACTIVE ────────────────────────── */
+  .print-btn,.deploy-row,.abar,.tw,
+  #portfolioMap,input,select,button,
+  [id="coAdjuster"],
+  .slbl::after{display:none!important}
+
+  /* ── SECTION LABELS — keep as clean dividers ─────────────── */
+  .slbl{
+    font-size:8px!important;font-weight:800!important;
+    letter-spacing:1.5px!important;text-transform:uppercase!important;
+    color:#64748b!important;margin:18px 0 8px!important;
+    display:block!important;border-bottom:1px solid #e2e8f0!important;
+    padding-bottom:4px!important;
+  }
+
+  /* ── HEADER ──────────────────────────────────────────────── */
+  .hdr{
+    background:#0A2540!important;color:#fff!important;
+    padding:14px 18px!important;
+    border-bottom:3px solid #5bcbf5!important;
+    display:flex!important;justify-content:space-between!important;
+    align-items:flex-end!important;
+    page-break-after:avoid!important;
+  }
+  .hdr h1{font-size:15px!important;color:#fff!important;font-weight:800!important}
+  .hdr p{font-size:8.5px!important;color:#5bcbf5!important;margin-top:2px!important}
+  .hdr-right .sub{font-size:8px!important;color:#94a3b8!important}
+  .hdr svg{display:block!important}
+
+  /* ── BEFORE/AFTER BANNER ─────────────────────────────────── */
+  #baBanner{
+    background:#f8fafc!important;
+    border:1px solid #e2e8f0!important;
+    border-left:4px solid #5bcbf5!important;
+    padding:14px 18px!important;margin:14px 0 12px!important;
+    display:flex!important;gap:0!important;align-items:stretch!important;
+    page-break-inside:avoid!important;border-radius:6px!important;
+  }
+  #baBanner [style*="color:#f87171"]{color:#dc2626!important}
+  #baBanner [style*="color:#4ade80"]{color:#15803d!important}
+  #baBanner [style*="color:#c4b5fd"]{color:#6d28d9!important}
+  #baBanner [style*="color:#ef4444"]{color:#dc2626!important}
+  #baBanner [style*="color:#22c55e"]{color:#15803d!important}
+  #baBanner [style*="color:#a78bfa"]{color:#6d28d9!important}
+  #baBanner [style*="color:var(--blue)"]{color:#0369a1!important}
+  #baBanner [style*="color:#7b96b0"]{color:#64748b!important}
+  #baBanner [style*="font-size:22px"]{font-size:17px!important;font-weight:800!important}
+  #baBanner [style*="font-size:8.5px"]{font-size:8px!important;font-weight:700!important}
+  #baBanner [style*="font-size:9px"]{font-size:8.5px!important}
+  #baBanner [style*="font-size:11px"]{font-size:9.5px!important}
+  #baBanner [style*="font-size:26px"]{font-size:19px!important;font-weight:800!important}
+  #baBanner [style*="color:var(--border2)"]{border-color:#e2e8f0!important}
+  #baBanner [style*="font-size:13px"]{font-size:9px!important}
+
+  /* ── EXEC SUMMARY ────────────────────────────────────────── */
+  #execSummary{
+    font-size:10.5px!important;line-height:1.75!important;
+    color:#1e293b!important;background:transparent!important;
+  }
+  [id="execSummary"]~* [style*="background:var(--card)"]{background:#f8fafc!important}
+  /* Rationale card wrapper */
+  #execSummary{outline:none!important}
+  /* The rationale card */
+  .content>div:first-child{
+    background:#f8fafc!important;
+    border:1px solid #e2e8f0!important;
+    border-radius:6px!important;
+    overflow:hidden!important;
+    margin-bottom:14px!important;
+    page-break-inside:avoid!important;
+  }
+  .content>div:first-child>div:first-child{
+    background:#0A2540!important;padding:10px 16px!important;
+    border-bottom:2px solid #5bcbf5!important;
+  }
+  .content>div:first-child>div:first-child *{color:#fff!important}
+  .content>div:first-child>div:last-child{
+    padding:14px 18px!important;background:#f8fafc!important;
+  }
+
+  /* ── SUMMARY STRIP ───────────────────────────────────────── */
+  .summary-strip{
+    display:grid!important;grid-template-columns:repeat(6,1fr)!important;
+    gap:6px!important;margin-bottom:14px!important;
+    page-break-inside:avoid!important;
+  }
+  .ss{
+    background:#f1f5f9!important;border:1px solid #e2e8f0!important;
+    border-radius:6px!important;padding:8px 10px!important;
+    box-shadow:none!important;
+  }
+  .ss-label{font-size:7px!important;color:#64748b!important;margin-bottom:3px!important}
+  .ss-val{font-size:14px!important;color:#0f172a!important;line-height:1.1!important}
+  .ss-val.green{color:#15803d!important}
+  .ss-val.blue{color:#0369a1!important}
+  .ss-val.purple{color:#6d28d9!important}
+  .ss-val.amber{color:#b45309!important}
+  .ss-sub{font-size:7.5px!important;color:#64748b!important}
+
+  /* ── 5-YR PROJECTION TABLES ──────────────────────────────── */
+  .proj-grid{
+    display:grid!important;
+    grid-template-columns:1fr 1fr 1fr!important;
+    gap:8px!important;margin-bottom:14px!important;
+    page-break-inside:avoid!important;
+  }
+  .proj-card{
+    background:#f8fafc!important;border:1px solid #e2e8f0!important;
+    border-radius:6px!important;box-shadow:none!important;
+    overflow:hidden!important;page-break-inside:avoid!important;
+  }
+  .proj-hdr{
+    background:#0A2540!important;padding:8px 12px!important;
+  }
+  .proj-hdr h3{font-size:9.5px!important;color:#5bcbf5!important;font-weight:800!important}
+  .proj-hdr p{font-size:7.5px!important;color:#94a3b8!important;margin-top:2px!important}
+  .pt{width:100%!important;border-collapse:collapse!important}
+  .pt th{
+    background:#e2e8f0!important;color:#374151!important;
+    font-size:8px!important;padding:5px 8px!important;
+    border-bottom:1px solid #cbd5e1!important;text-align:right!important;
+    white-space:normal!important;word-break:break-word!important;line-height:1.3!important;
+  }
+  .pt th:first-child{text-align:left!important}
+  .pt td{
+    color:#1e293b!important;font-size:9px!important;
+    padding:5px 8px!important;border-bottom:1px solid #f1f5f9!important;
+    text-align:right!important;font-weight:600!important;
+  }
+  .pt td:first-child{text-align:left!important;color:#64748b!important;font-weight:400!important}
+  .pt tr.yr5 td{
+    background:#dcfce7!important;color:#166534!important;
+    font-weight:700!important;border-top:1px solid #86efac!important;
+  }
+  .pt .empty td{color:#64748b!important;font-style:italic!important;background:#f8fafc!important}
+
+  /* ── ANALYTICS: hide interactive, show print images ────────── */
+  canvas{display:none!important}
+  .no-print{display:none!important}
+  #printAnalytics{display:block!important}
+  #printAnalytics img{
+    width:100%!important;display:block!important;
+    border-radius:4px!important;
+  }
+  #printAnalytics [style*="grid-template-columns"]{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:10px!important;margin-bottom:10px!important;
+    page-break-inside:avoid!important;
+  }
+  /* 5-yr projection tables: trim to fit portrait */
+  .proj-grid{
+    display:grid!important;
+    grid-template-columns:1fr 1fr 1fr!important;
+    gap:8px!important;margin-bottom:12px!important;
+    page-break-inside:avoid!important;
+  }
+
+  /* ── MARKET CONTEXT ──────────────────────────────────────── */
+  /* Row 1: 4 cards */
+  .content [style*="grid-template-columns:repeat(4,1fr)"]{
+    display:grid!important;grid-template-columns:repeat(4,1fr)!important;
+    gap:6px!important;margin-bottom:8px!important;
+    page-break-inside:avoid!important;
+  }
+  /* Row 2: 3 cards */
+  .content [style*="grid-template-columns:1fr 1fr 1fr"]{
+    display:grid!important;grid-template-columns:repeat(3,1fr)!important;
+    gap:6px!important;margin-bottom:14px!important;
+    page-break-inside:avoid!important;
+  }
+  /* All market context cards — light theme */
+  .content [style*="background:var(--card)"][style*="border-radius:10px"]{
+    background:#f8fafc!important;
+    border:1px solid #e2e8f0!important;
+    border-radius:6px!important;
+    box-shadow:none!important;
+  }
+  /* Market context text colors */
+  .content [style*="color:#f87171"]{color:#dc2626!important}
+  .content [style*="color:#5bcbf5"]{color:#0369a1!important}
+  .content [style*="color:#4ade80"]{color:#15803d!important}
+  .content [style*="color:#fbbf24"]{color:#b45309!important}
+  .content [style*="color:#a78bfa"]{color:#6d28d9!important}
+  .content [style*="color:#e2eaf2"]{color:#1e293b!important}
+  .content [style*="color:#7b96b0"]{color:#64748b!important}
+  .content [style*="color:var(--blue)"]{color:#0369a1!important}
+  .content [style*="color:var(--muted)"]{color:#64748b!important}
+  /* Color accent bars at top of market cards */
+  .content [style*="position:absolute;top:0;left:0;right:0;height:3px"]{display:none!important}
+  /* Market card font sizes */
+  .content [style*="font-size:42px"]{font-size:28px!important;font-weight:800!important}
+  .content [style*="font-size:36px"]{font-size:22px!important;font-weight:800!important}
+  .content [style*="font-size:28px"]{font-size:18px!important;font-weight:800!important}
+  .content [style*="font-size:24px"]{font-size:16px!important;font-weight:800!important}
+
+  /* ── FOOTER ──────────────────────────────────────────────── */
+  .disclaimer{display:none!important}
+  body::after{
+    content:"Prepared by Daryn Fillis \2022  NEO Home Loans \2022  NMLS #1988371 \2022  Not a loan commitment. All figures are estimates for planning purposes only. Rates subject to market conditions and final underwriting. Prepayment penalties on 5315 Hersholt Ave and 5614 Castana Ave must be verified before proceeding.";
+    display:block!important;position:fixed!important;
+    bottom:0;left:0;right:0;
+    font-size:7px!important;color:#94a3b8!important;
+    font-family:'Montserrat',Arial,sans-serif!important;
+    font-style:italic!important;padding:5px 0.65in!important;
+    border-top:1px solid #e2e8f0!important;
+    background:#fff!important;text-align:center!important;
+  }
+}
+
+/* Exec summary placeholder */
+[contenteditable][data-placeholder]:empty:before{
+  content:attr(data-placeholder);
+  color:#3a5068;
+  pointer-events:none;
+}
+[contenteditable]:focus{
+  background:rgba(91,203,245,.03);
+  border-radius:6px;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-left" style="display:flex;align-items:center;gap:22px">
+    <div>
+      <svg width="110" height="52" viewBox="0 0 385 183" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block">
+        <g clip-path="url(#hc0)"><g clip-path="url(#hc1)">
+        <path d="M238.134 27.46V74.0732H224.736L190.997 43.4394V74.0732H176.293V27.46H192.411L223.381 55.9579V27.46H238.124H238.134Z" fill="white"/>
+        <path d="M306.976 63.6807V74.0732H251.217V27.46H306.146V37.8426H266.217V45.4962H299.125V55.424H266.217V63.6807H306.967H306.976Z" fill="white"/>
+        <path d="M312.86 50.7666C312.86 34.985 326.219 25.9273 346.895 25.9273C367.572 25.9273 381.01 34.985 381.01 50.7666C381.01 66.5483 367.572 75.6059 346.895 75.6059C326.219 75.6059 312.86 66.5483 312.86 50.7666ZM365.475 50.7666C365.475 41.976 358.385 36.9824 346.895 36.9824C335.405 36.9824 328.315 41.976 328.315 50.7666C328.315 59.5573 335.375 64.541 346.895 64.541C358.415 64.541 365.475 59.5573 365.475 50.7666Z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M4 91.091V43.1527C4 36.3001 8.33106 30.1892 14.8079 27.9149L74.7011 6.91219C78.1521 5.69594 81.9195 5.69594 85.3705 6.91219L145.264 27.9149C151.731 30.1793 156.072 36.2902 156.072 43.1527V91.091C156.072 97.9535 151.741 104.064 145.264 106.329L85.3705 127.331C81.9195 128.548 78.1521 128.548 74.7011 127.331L14.8079 106.329C8.33106 104.055 4 97.9535 4 91.091ZM63.201 69.2577C63.5471 69.0105 64.0119 69.0105 64.3481 69.2577H64.3778L72.1104 74.8742C72.1895 74.9335 72.2488 75.0028 72.3081 75.072C72.6246 75.5071 72.5356 76.1103 72.1104 76.4366L48.2203 93.6916C48.0324 93.8201 47.8149 93.8894 47.5875 93.8894H35.9787C35.3854 93.8894 34.9008 93.4048 34.9008 92.8115V36.6759C34.9008 36.0826 35.3854 35.598 35.9787 35.598H47.8841C48.1116 35.5881 48.3291 35.6672 48.517 35.7958L78.4685 57.4313C78.8146 57.6785 79.2794 57.6785 79.6156 57.4313L109.567 35.7958C109.755 35.6672 109.973 35.598 110.2 35.598H122.105C122.699 35.598 123.173 36.0826 123.173 36.6759V92.8115C123.173 93.4048 122.689 93.8894 122.096 93.8894H110.487C110.259 93.8894 110.042 93.8201 109.854 93.6916L47.449 48.6407C47.2809 48.522 47.0832 48.4528 46.8854 48.4528C46.3416 48.4528 45.8867 48.878 45.8867 49.4218V79.8579C45.8867 80.0656 45.9559 80.2633 46.0746 80.4215C46.391 80.8566 47.0041 80.9555 47.4391 80.6391L63.201 69.2577ZM110.576 48.6209L89.5236 63.8092H89.5137V63.829C89.4247 63.8884 89.3555 63.9675 89.2962 64.0466C88.9798 64.4915 89.0687 65.1046 89.5137 65.4309L110.566 80.6193C110.734 80.738 110.932 80.8072 111.129 80.8072C111.673 80.8072 112.128 80.382 112.128 79.8381V49.4021C112.128 49.1944 112.059 48.9966 111.94 48.8384C111.624 48.4033 111.011 48.3045 110.576 48.6209Z" fill="white"/>
+        </g></g>
+        <defs><clipPath id="hc0"><rect width="377" height="122.391" fill="white" transform="translate(4 6)"/></clipPath><clipPath id="hc1"><rect width="377" height="122.239" fill="white" transform="translate(4 6)"/></clipPath></defs>
+      </svg>
+    </div>
+    <div>
+      <h1 style="font-weight:800;font-size:17px;color:#fff">Kyle Olson — Refinance Analysis</h1>
+      <p style="font-weight:200;font-size:10px;color:var(--blue);margin-top:3px;letter-spacing:.8px;text-transform:uppercase">8-Property ADU Portfolio &nbsp;|&nbsp; Lakewood, CA &nbsp;|&nbsp; Interest Only &nbsp;|&nbsp; Rate Quote: March 30, 2026</p>
+      <div style="font-weight:800;font-size:9px;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-top:5px"><span style="color:#fff">Daryn</span> Fillis &nbsp;|&nbsp; NMLS #1988371</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div style="text-align:right">
+      <div class="sub">Not a loan commitment &nbsp;|&nbsp; For planning purposes only</div>
+      <div class="sub" style="margin-top:4px">All costs visible. Move any number. Recalculates instantly.</div>
+    </div>
+    <button class="print-btn" onclick="window.print()">Print / PDF</button>
+  </div>
+</div>
+<!-- BEFORE / AFTER HERO -->
+<div id="baBanner" style="
+  background:linear-gradient(135deg,#0a1f35 0%,#0d2a42 50%,#0a1f35 100%);
+  border-bottom:3px solid var(--blue);
+  padding:18px 28px 16px;
+  display:flex;gap:0;align-items:stretch
+">
+  <!-- BEFORE -->
+  <div style="flex:1;padding-right:24px;border-right:1px solid var(--border2)">
+    <div style="font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#ef4444;margin-bottom:12px">Current Loans — Before</div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">Total Balance</div>
+        <div style="font-size:22px;font-weight:800;color:#f87171;line-height:1" id="ba-cur-bal">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">Blended Rate</div>
+        <div style="font-size:22px;font-weight:800;color:#f87171;line-height:1" id="ba-cur-rate">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">Monthly Payment</div>
+        <div style="font-size:22px;font-weight:800;color:#f87171;line-height:1" id="ba-cur-pmt">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">Annual Interest</div>
+        <div style="font-size:22px;font-weight:800;color:#f87171;line-height:1" id="ba-cur-ann">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">5-Year Cost</div>
+        <div style="font-size:22px;font-weight:800;color:#f87171;line-height:1" id="ba-cur-5yr">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARROW -->
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 22px;flex-shrink:0">
+    <div style="font-size:28px;color:var(--blue);font-weight:800;line-height:1">→</div>
+    <div style="font-size:8px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-top:4px">Refinance</div>
+  </div>
+
+  <!-- AFTER -->
+  <div style="flex:1;padding-left:24px;border-left:1px solid var(--border2)">
+    <div style="font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#22c55e;margin-bottom:12px">Proposed Refinance — After</div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">Total Balance</div>
+        <div style="font-size:22px;font-weight:800;color:#4ade80;line-height:1" id="ba-new-bal">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">Blended Rate</div>
+        <div style="font-size:22px;font-weight:800;color:#4ade80;line-height:1" id="ba-new-rate">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">Monthly Payment</div>
+        <div style="font-size:22px;font-weight:800;color:#4ade80;line-height:1" id="ba-new-pmt">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">Annual Interest</div>
+        <div style="font-size:22px;font-weight:800;color:#4ade80;line-height:1" id="ba-new-ann">—</div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:#7b96b0;font-weight:600;margin-bottom:3px">5-Year Cost</div>
+        <div style="font-size:22px;font-weight:800;color:#4ade80;line-height:1" id="ba-new-5yr">—</div>
+      </div>
+      <div style="border-left:1px solid var(--border2);padding-left:18px;margin-left:2px">
+        <div style="font-size:9px;color:#a78bfa;font-weight:700;margin-bottom:3px">Cash-Out at Closing</div>
+        <div style="font-size:22px;font-weight:800;color:#c4b5fd;line-height:1" id="ba-new-co">—</div>
+        <div style="font-size:9px;color:#7b96b0;margin-top:4px;font-style:italic">No income tax event</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELTA -->
+  <div style="
+    margin-left:22px;padding-left:22px;border-left:1px solid var(--border2);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    flex-shrink:0;min-width:160px
+  ">
+    <div style="font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue);margin-bottom:10px">You Generate</div>
+    <div style="font-size:11px;font-weight:800;color:#7b96b0;margin-bottom:3px">Monthly</div>
+    <div style="font-size:22px;font-weight:800;color:var(--blue);line-height:1;margin-bottom:8px" id="ba-delta-mo">—</div>
+    <div style="font-size:11px;font-weight:800;color:#7b96b0;margin-bottom:3px">Annual</div>
+    <div style="font-size:22px;font-weight:800;color:var(--blue);line-height:1;margin-bottom:8px" id="ba-delta-ann">—</div>
+    <div style="font-size:11px;font-weight:800;color:#7b96b0;margin-bottom:3px">5-Year Total</div>
+    <div style="font-size:22px;font-weight:800;color:var(--blue);line-height:1" id="ba-delta-5yr">—</div>
+  </div>
+</div>
+
+
+
+<!-- LENDER DEFAULTS BAR removed — set rates per property in the table below -->
+
+
+<div class="content">
+
+<!-- SUMMARY -->
+<div class="summary-strip" id="summaryStrip"></div>
+
+<!-- COST BREAKDOWN CARD -->
+<div id="costBreakdown" style="background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:18px;box-shadow:0 2px 12px rgba(0,0,0,.3)">
+  <div style="background:linear-gradient(135deg,#0A2540 0%,#0d3a5c 100%);padding:12px 20px;border-bottom:2px solid var(--blue);display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <div style="font-size:12px;font-weight:800;color:#fff">Closing Cost Breakdown</div>
+      <div style="font-size:9px;font-weight:200;color:var(--blue);margin-top:2px">Where every dollar goes — active loans only</div>
+    </div>
+    <div style="font-size:9px;color:#7b96b0;font-style:italic">Lender credit applied as offset</div>
+  </div>
+  <div style="padding:16px 20px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+      <!-- LEFT: itemized -->
+      <div>
+        <table style="width:100%;border-collapse:collapse;font-size:11px">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:5px 8px;background:var(--bg3);color:var(--muted);font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:4px 0 0 0">Cost Item</th>
+              <th style="text-align:right;padding:5px 8px;background:var(--bg3);color:var(--muted);font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Per Loan Avg</th>
+              <th style="text-align:right;padding:5px 8px;background:var(--bg3);color:var(--muted);font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:0 4px 0 0">Portfolio Total</th>
+            </tr>
+          </thead>
+          <tbody id="costBreakTbody"></tbody>
+          <tfoot id="costBreakFoot"></tfoot>
+        </table>
+      </div>
+
+      <!-- RIGHT: visual summary -->
+      <div style="display:flex;flex-direction:column;gap:10px;justify-content:center">
+        <div style="background:var(--bg3);border-radius:8px;padding:14px 16px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px">NEO Home Loans Broker Fee</div>
+          <div style="font-size:28px;font-weight:800;color:#38bdf8;line-height:1" id="cb-comp-total">—</div>
+          <div style="font-size:9px;color:#7b96b0;margin-top:4px" id="cb-comp-note">—</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:14px 16px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px">Hard Costs (Unavoidable)</div>
+          <div style="font-size:28px;font-weight:800;color:#4ade80;line-height:1" id="cb-hard-total">—</div>
+          <div style="font-size:9px;color:#7b96b0;margin-top:4px">Prepaid interest, escrow, title, admin UW</div>
+        </div>
+        <div style="background:var(--navy);border:1px solid var(--blue);border-radius:8px;padding:14px 16px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px">Total Closing Costs</div>
+          <div style="font-size:28px;font-weight:800;color:#fff;line-height:1" id="cb-total">—</div>
+          <div style="font-size:9px;color:#94a3b8;margin-top:4px" id="cb-total-note">—</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TABLE -->
+<!-- LOAN STRUCTURE RATIONALE -->
+<div style="background:var(--card);border:1px solid var(--border2);border-radius:10px;overflow:hidden;margin-bottom:18px;box-shadow:0 2px 12px rgba(0,0,0,.3)">
+  <div style="background:linear-gradient(135deg,#0A2540 0%,#0d3a5c 100%);padding:14px 20px;border-bottom:2px solid var(--blue);display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <div style="font-size:12px;font-weight:800;color:#fff;letter-spacing:.3px">Recommended Loan Structure — Executive Summary</div>
+      <div style="font-size:9.5px;font-weight:200;color:var(--blue);margin-top:3px">8-Property IO Portfolio Refinance &nbsp;|&nbsp; Daryn Fillis, NEO Home Loans &nbsp;|&nbsp; NMLS #1988371</div>
+    </div>
+    <div style="font-size:9px;color:#7b96b0;font-style:italic">All rates subject to market conditions &amp; final underwriting</div>
+  </div>
+  <div style="padding:20px 24px">
+    <div
+      id="execSummary"
+      contenteditable="true"
+      spellcheck="true"
+      style="
+        font-family:'Montserrat',sans-serif;
+        font-size:12px;
+        font-weight:400;
+        color:#c8d8e8;
+        line-height:1.85;
+        outline:none;
+        min-height:90px;
+        caret-color:var(--blue);
+      "
+      data-placeholder="Click here to write your executive summary..."
+    >Kyle,
+
+The portfolio is carrying a blended rate of 7.655% across $10.87M of debt. The assets are performing and the structure is functional. The cost of capital is not.
+
+A straight rate and term refinance reduces the blended rate into the high 6% range and improves cash flow by $6,970 per month, or $83,600 annually. No change to leverage, no complexity.
+
+The proposed structure goes further by allocating loans across multiple lenders based on pricing and exposure limits. This achieves a lower cost of capital at the portfolio level than a single-lender execution. Total debt increases modestly due to financed closing costs, but the blended rate lands in the mid-6% range and cash flow improves by $3,951 per month. On top of that, $379,071 in net proceeds comes back at closing after costs are covered, capital you can put to work.
+
+The structure does three things: lowers the effective cost of capital across all eight loans, maintains interest-only flexibility with short prepayment terms, and distributes lender exposure to achieve better pricing at each position.
+
+On timing, staying put costs $6,970 per month relative to available execution today. A 60 to 90 day delay is $14,000 to $21,000 in additional interest expense with no structural benefit. A 25 basis point rate improvement would reduce monthly interest cost by approximately $2,200. At that savings rate, it takes 6 to 9 months just to recover the cost of waiting, assuming that improvement materializes and is reflected in DSCR pricing, which is not guaranteed.
+
+The outcome here is driven by structure, not by rate timing. The execution improves the cost of capital immediately and can be adjusted if market conditions shift.
+
+Ready when you are.</div>
+  </div>
+</div>
+
+
+<div class="slbl">Property-Level Detail — All Fields Editable</div>
+<div class="tw">
+<table id="mainTable">
+<thead>
+<tr class="shdr" id="sectionRow"></tr>
+<tr id="colHdrs"></tr>
+</thead>
+<tbody id="tableBody"></tbody>
+<tfoot><tr class="tot-row" id="totRow"></tr></tfoot>
+</table>
+</div>
+
+<!-- 5-YEAR PROJECTION -->
+<div class="deploy-row">
+  <label>Cash-Out Deployment Return</label>
+  <input class="ai" id="g-deploy" value="8.0" oninput="recalcAll()">
+  <span style="font-size:9px;color:#7b96b0">% &nbsp;(compounded annually)</span>
+  <div style="width:1px;height:22px;background:var(--border2);margin:0 4px"></div>
+  <label>Annual Property Appreciation</label>
+  <input class="ai" id="g-appr" value="5.2" oninput="recalcAll()">
+  <span style="font-size:9px;color:#7b96b0">%</span>
+  <span class="deploy-note">Appreciation applied to total portfolio value in the 5-year projection</span>
+</div>
+
+<div class="slbl">5-Year Projection</div>
+<div class="proj-grid" style="grid-template-columns:1fr 1fr 1fr">
+  <div class="proj-card">
+    <div class="proj-hdr">
+      <h3>Generated Cash Flow</h3>
+      <p>Reduction in annual interest expense vs. keeping current loans</p>
+    </div>
+    <table class="pt" id="projSav"></table>
+  </div>
+  <div class="proj-card">
+    <div class="proj-hdr">
+      <h3>Cash-Out Deployment</h3>
+      <p>Compounded annual return on deployed cash-out + generated cash flow</p>
+    </div>
+    <table class="pt" id="projCO"></table>
+  </div>
+  <div class="proj-card">
+    <div class="proj-hdr">
+      <h3>Property Appreciation</h3>
+      <p>Estimated portfolio value and equity growth at appreciation rate above</p>
+    </div>
+    <table class="pt" id="projAppr"></table>
+  </div>
+</div>
+
+<!-- PRINT-ONLY CHART IMAGES -->
+<div id="printAnalytics" style="display:none">
+  <div class="slbl" style="margin-top:10px">Portfolio Analytics — 5-Year Summary</div>
+  <div class="proj-card" style="border:1.5px solid #bfdbfe;margin-bottom:14px;page-break-inside:avoid">
+    <div class="proj-hdr" style="background:#0A2540"><h3 style="color:#5bcbf5">5-Year Summary at a Glance</h3><p>Key outcome numbers at Year 5 — based on current inputs</p></div>
+    <div style="padding:20px" id="print-summary-card"></div>
+  </div>
+</div>
+
+<!-- MAP SECTION -->
+
+<div class="slbl">Portfolio Analytics</div>
+
+<!-- CASH-OUT ADJUSTER is now inline with charts below -->
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px">
+
+  <div class="proj-card no-print">
+    <div class="proj-hdr">
+      <h3>Generated Cash Flow — 5 Year</h3>
+      <p>Annual and cumulative savings vs. keeping current loans</p>
+    </div>
+    <div style="padding:16px">
+      <div style="position:relative;height:220px"><canvas id="chartCF"></canvas></div>
+    </div>
+  </div>
+
+  <div class="proj-card no-print">
+    <div class="proj-hdr">
+      <h3>Cash-Out Deployment Growth</h3>
+      <p>Compounded value of deployed cash-out over 5 years</p>
+    </div>
+    <div style="padding:16px">
+      <div style="position:relative;height:220px"><canvas id="chartCO"></canvas></div>
+    </div>
+  </div>
+
+  <div class="proj-card no-print" style="border:1.5px solid rgba(167,139,250,.35)">
+    <div class="proj-hdr" style="background:linear-gradient(135deg,#1e1040 0%,#2d1b69 100%)">
+      <h3 style="color:#c4b5fd">Combined Wealth Impact</h3>
+      <p>Equity gain + generated cash flow + cash-out deployment return</p>
+    </div>
+    <div style="padding:16px">
+      <div style="position:relative;height:220px"><canvas id="chartCombined"></canvas></div>
+    </div>
+  </div>
+
+  <!-- CASH-OUT ADJUSTER — 4th card -->
+  <div class="proj-card no-print" style="border:1.5px solid rgba(167,139,250,.35)">
+    <div class="proj-hdr" style="background:linear-gradient(135deg,#1e1040 0%,#2d1b69 100%)">
+      <h3 style="color:#c4b5fd">Cash-Out Adjuster</h3>
+      <p>Syncs with property table — updates all charts instantly</p>
+    </div>
+    <div style="padding:12px 14px">
+      <div id="coAdjuster" style="display:flex;flex-direction:column;gap:7px"></div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:8.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Total Requested</div>
+          <div style="font-size:15px;font-weight:800;color:#c4b5fd" id="coadj-total">$0</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:8.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Max Available</div>
+          <div style="font-size:15px;font-weight:800;color:#a78bfa" id="coadj-max">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MARKET CONTEXT -->
+<div class="slbl">Market Context — Lakewood, CA</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px">
+
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ef4444,#f97316)"></div>
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Affordability Index</div>
+    <div style="font-size:42px;font-weight:800;color:#f87171;line-height:1;margin-bottom:4px">42</div>
+    <div style="font-size:10px;color:#7b96b0;line-height:1.4">Out of 100. At 100, median income covers median home price with 20% down. <span style="color:#f87171;font-weight:700">58 points below affordable.</span></div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)">
+      <div style="font-size:9px;color:var(--muted);margin-bottom:3px">What this means for Kyle</div>
+      <div style="font-size:10px;color:#e2eaf2;font-weight:600">Most residents <em>cannot</em> afford to buy — they rent. Deep, structural renter demand in both ZIPs.</div>
+    </div>
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#5bcbf5,#38bdf8)"></div>
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Renter Pool — Los Angeles</div>
+    <div style="font-size:42px;font-weight:800;color:#5bcbf5;line-height:1;margin-bottom:4px">4.9M</div>
+    <div style="font-size:10px;color:#7b96b0;line-height:1.4">Renters in LA County. Only <span style="color:#5bcbf5;font-weight:700">1.23M (13%)</span> can afford to purchase — the rest stay renters.</div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)">
+      <div style="display:flex;gap:12px">
+        <div>
+          <div style="font-size:9px;color:var(--muted)">Homeowners</div>
+          <div style="font-size:14px;font-weight:800;color:#e2eaf2">4.92M <span style="font-size:10px;font-weight:400;color:#7b96b0">(50%)</span></div>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--muted)">Renters</div>
+          <div style="font-size:14px;font-weight:800;color:#5bcbf5">4.9M <span style="font-size:10px;font-weight:400;color:#7b96b0">(37%)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#22c55e,#4ade80)"></div>
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Median Days on Market</div>
+    <div style="display:flex;gap:16px;align-items:flex-end;margin-bottom:4px">
+      <div>
+        <div style="font-size:11px;color:#7b96b0;font-weight:600;margin-bottom:2px">ZIP 90712</div>
+        <div style="font-size:36px;font-weight:800;color:#4ade80;line-height:1">22 <span style="font-size:13px;color:#7b96b0;font-weight:400">days</span></div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:#7b96b0;font-weight:600;margin-bottom:2px">ZIP 90713</div>
+        <div style="font-size:36px;font-weight:800;color:#4ade80;line-height:1">25 <span style="font-size:13px;color:#7b96b0;font-weight:400">days</span></div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:#7b96b0;line-height:1.4">Homes move fast. Kyle's collateral is highly liquid — strong exit optionality in both ZIPs.</div>
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div>
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Median Home Price</div>
+    <div>
+      <div style="font-size:11px;color:#7b96b0;font-weight:600;margin-bottom:2px">ZIP 90712</div>
+      <div style="font-size:24px;font-weight:800;color:#fbbf24;line-height:1;margin-bottom:8px">$865,769</div>
+      <div style="font-size:11px;color:#7b96b0;font-weight:600;margin-bottom:2px">ZIP 90713</div>
+      <div style="font-size:24px;font-weight:800;color:#fbbf24;line-height:1">$906,334</div>
+    </div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)">
+      <div style="font-size:9px;color:var(--muted);margin-bottom:2px">Median Household Income</div>
+      <div style="font-size:13px;font-weight:700;color:#e2eaf2">$89,469 <span style="font-size:9px;color:#7b96b0;font-weight:400">vs $80,630 national avg</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MARKET CONTEXT ROW 2 — SUPPLY & APPRECIATION -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:22px">
+
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px">
+    <div style="font-size:36px;font-weight:800;color:#a78bfa;line-height:1;flex-shrink:0">21K</div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#e2eaf2;margin-bottom:3px">New Homes Built / Year — LA County</div>
+      <div style="font-size:10px;color:#7b96b0;line-height:1.4">Supply severely lags demand. 21,106 units/yr in a county of 9.8M. Structural undersupply keeps rents elevated.</div>
+    </div>
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px">
+    <div style="flex-shrink:0">
+      <div style="font-size:11px;color:#7b96b0;margin-bottom:2px">90712</div>
+      <div style="font-size:28px;font-weight:800;color:#4ade80;line-height:1">5.24%</div>
+      <div style="font-size:11px;color:#7b96b0;margin-top:6px;margin-bottom:2px">90713</div>
+      <div style="font-size:28px;font-weight:800;color:#4ade80;line-height:1">5.13%</div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#e2eaf2;margin-bottom:3px">Forecasted Annual Appreciation</div>
+      <div style="font-size:10px;color:#7b96b0;line-height:1.4">5yr cumulative gain: <span style="color:#4ade80;font-weight:700">+26.19%</span> in 90712, <span style="color:#4ade80;font-weight:700">+25.66%</span> in 90713. Historical 5yr avg: 5.60% and 5.75%.</div>
+    </div>
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px">
+    <div style="font-size:36px;font-weight:800;color:#5bcbf5;line-height:1;flex-shrink:0">107%</div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#e2eaf2;margin-bottom:3px">Active Listings YoY — ZIP 90712</div>
+      <div style="font-size:10px;color:#7b96b0;line-height:1.4">Inventory up 107% year-over-year but still only 29 active listings. 62% YoY in 90713 with 21 listings. Seller's market dynamics persist.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CHARTS SECTION -->
+
+<div class="slbl">Portfolio Map — Click Any Pin for Property Details</div>
+<div id="portfolioMap" style="height:480px;border-radius:10px;border:1px solid var(--border2);overflow:hidden;margin-bottom:22px;position:relative"></div>
+
+<div class="disclaimer">
+  All figures are estimates for planning purposes only. Closing costs, rates, and values are assumptions and will vary. Not a loan commitment or rate lock.
+  Prepayment penalties on 5315 Hersholt Ave and 5614 Castana Ave must be verified with Citadel/Acra before proceeding.
+  Daryn Fillis NMLS #1988371 | NEO Home Loans.
+</div>
+
+</div>
+
+<script>
+// ── PROPERTY DATA ─────────────────────────────────────────────────────────────
+const PROPS=[
+  {id:0,addr:'5315 Hersholt Ave',city:'Lakewood, CA 90712',entity:'Pacific ADU LLC',oldBal:1400000,oldRate:.07625,ppp:true, lat:33.8497,lng:-118.1347,apprForecast:5.24,apprHist5:5.60,zip:'90712'},
+  {id:1,addr:'6029 Hersholt Ave',city:'Lakewood, CA 90712',entity:'SoCal ADU Venture LLC',oldBal:1397500,oldRate:.07625,ppp:false,lat:33.8571,lng:-118.1348,apprForecast:5.24,apprHist5:5.60,zip:'90712'},
+  {id:2,addr:'5919 Arbor Rd',city:'Lakewood, CA 90713',entity:'SoCal ADU LLC',oldBal:1365000,oldRate:.07625,ppp:false,lat:33.8558,lng:-118.1245,apprForecast:5.13,apprHist5:5.75,zip:'90713'},
+  {id:3,addr:'6025 Bellflower Blvd',city:'Lakewood, CA 90713',entity:'Pacific ADU LLC',oldBal:1283750,oldRate:.07875,ppp:false,lat:33.8563,lng:-118.1225,apprForecast:5.13,apprHist5:5.75,zip:'90713'},
+  {id:4,addr:'5614 Castana Ave',city:'Lakewood, CA 90712',entity:'Pacific ADU LLC',oldBal:1393000,oldRate:.07625,ppp:true, lat:33.8520,lng:-118.1380,apprForecast:5.24,apprHist5:5.60,zip:'90712'},
+  {id:5,addr:'6524 Dashwood St',city:'Lakewood, CA 90713',entity:'SoCal ADU Venture LLC',oldBal:1267500,oldRate:.07625,ppp:false,lat:33.8635,lng:-118.1235,apprForecast:5.13,apprHist5:5.75,zip:'90713'},
+  {id:6,addr:'2729 Frankel St',city:'Lakewood, CA 90712',entity:'So Cal ADU LLC',oldBal:1365000,oldRate:.07625,ppp:false,lat:33.8476,lng:-118.1358,apprForecast:5.24,apprHist5:5.60,zip:'90712'},
+  {id:7,addr:'4349 Radnor Ave',city:'Lakewood, CA 90713',entity:'SoCal ADU Venture LLC',oldBal:1397500,oldRate:.07625,ppp:false,lat:33.8535,lng:-118.1220,apprForecast:5.13,apprHist5:5.75,zip:'90713'},
+];
+
+// Lender assignments: Acra=Hersholt(5315),Castana,Radnor | ClearEdge=Hersholt(6029),Arbor,Bellflower,Dashwood,Frankel
+const DEF_LENDERS=['Acra','ClearEdge','ClearEdge','ClearEdge','Acra','ClearEdge','ClearEdge','Acra'];
+const DEF_MAX_LTV=[0.70, 0.75, 0.75, 0.75, 0.70, 0.75, 0.75, 0.70];
+
+// Track which properties have had their rate manually overridden
+const rateOverridden=new Array(8).fill(false);
+
+const DEF_RATES={Acra:6.625,LendSure:6.875,ClearEdge:6.625}; // ClearEdge: 6.625 R&T, 6.875 w/ C/O
+const DEF_CREDITS=[0,1100,1100,1100,0,1100,1100,0]; // ClearEdge flat $1,100, Acra $0
+const DEF_ADMIN_UW={Acra:1895,LendSure:2150,ClearEdge:2174}; // Admin UW per lender
+let state=PROPS.map((p,i)=>({
+  lender:DEF_LENDERS[i],
+  newRate:DEF_RATES[DEF_LENDERS[i]]||6.625,
+  compPct:1.5,
+  lenderCredit:DEF_CREDITS[i],
+  escrow:1195,
+  title:1005,
+  adminUw:DEF_ADMIN_UW[DEF_LENDERS[i]]||0,
+  propVal:2000000,
+  maxLtv:DEF_MAX_LTV[i],
+  cashOut:0,
+  choice:'roll',
+  u1:4500,u2:3750,u3:3750,
+  tax:1426,ins:575,
+}));
+
+// Flag to track whether we've applied default cash-out on first load
+let _defaultCOApplied=false;
+// Track which properties are active in the refinance
+let active=[true,true,true,false,true,false,true,true]; // Bellflower(3) and Dashwood(5) off by default
+
+// ── FORMATTERS ────────────────────────────────────────────────────────────────
+const parse=s=>parseFloat(String(s).replace(/[^0-9.-]/g,''))||0;
+const fmt=(n,d=0)=>n==null||isNaN(n)?'—':(n<0?'(':'')+'$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})+(n<0?')':'');
+const fmtP=(n,d=3)=>isNaN(n)?'—':n.toFixed(d)+'%';
+
+// ── CALCULATION ───────────────────────────────────────────────────────────────
+function calcProp(i){
+  const p=PROPS[i],s=state[i];
+  // ClearEdge: 6.875% with cash-out, 6.625% rate & term
+  let effectiveRate=s.newRate;
+  if(s.lender==='ClearEdge'){
+    effectiveRate=s.cashOut>0?(window._ceRateCO||6.75):6.625;
+    // Keep state in sync so display is correct
+    if(s.newRate!==effectiveRate&&!rateOverridden[i]) state[i].newRate=effectiveRate;
+  }
+  const nr=effectiveRate/100;
+  const oldInt=p.oldBal*p.oldRate/12;
+
+  // Comp: $25K cap for ClearEdge only; uncapped for Acra/LendSure
+  const compBase=s.compPct/100*(p.oldBal+s.cashOut);
+  const compDollar=s.lender==='ClearEdge'?Math.min(compBase,25000):compBase;
+
+  // Old loan per diem: 15 days at old rate
+  const oldPerDiem=p.oldBal*p.oldRate/365*15;
+
+  // Base costs (excluding new prepaid — added below based on choice)
+  const adminUw=s.adminUw||0;
+  const baseCosts=compDollar-s.lenderCredit+oldPerDiem+s.escrow+s.title+adminUw;
+
+  let newBal,newPrepaid,totalCosts,clientBrings,cashNet;
+  const baseNewBal=p.oldBal+s.cashOut;
+
+  if(s.choice==='roll'){
+    // All costs rolled in — solve algebraically to avoid circular ref
+    const r15=nr*15/365;
+    newPrepaid=(baseNewBal+baseCosts)*r15/(1-r15);
+    totalCosts=baseCosts+newPrepaid;
+    newBal=baseNewBal+totalCosts;
+    clientBrings=0;
+    cashNet=s.cashOut;
+  } else if(s.choice==='co'){
+    // Cash-out covers costs; nothing rolled
+    newBal=baseNewBal;
+    newPrepaid=newBal*nr/365*15;
+    totalCosts=baseCosts+newPrepaid;
+    cashNet=Math.max(0,s.cashOut-totalCosts);
+    clientBrings=Math.max(0,totalCosts-s.cashOut);
+  } else {
+    // Come to table: client pays, nothing rolled
+    newBal=baseNewBal;
+    newPrepaid=newBal*nr/365*15;
+    totalCosts=baseCosts+newPrepaid;
+    clientBrings=totalCosts;
+    cashNet=s.cashOut;
+  }
+
+  const maxCO=Math.max(0,s.propVal*s.maxLtv-p.oldBal-Math.max(0,baseCosts));
+  const ltv=s.propVal>0?newBal/s.propVal:0;
+  const maxLtvPct=s.maxLtv;
+  const newInt=newBal*nr/12;
+  const totalRent=s.u1+s.u2+s.u3;
+  const itia=newInt+s.tax+s.ins;
+  const dscr=itia>0&&totalRent>0?totalRent/itia:0;
+  const monthlySav=oldInt-newInt;
+
+  return{
+    oldInt,compDollar,oldPerDiem,newPrepaid,baseCosts,totalCosts,adminUw,
+    newBal,maxCO,ltv,newInt,totalRent,itia,dscr,
+    monthlySav,annualSav:monthlySav*12,clientBrings,cashNet,nr
+  };
+}
+
+// ── TABLE STRUCTURE ───────────────────────────────────────────────────────────
+const SECTIONS=[
+  {label:'LOAN SETUP',bg:'#0d3b6e',txt:'#93c5fd',cols:5},
+  {label:'CLOSING COST BREAKDOWN',bg:'#1a3660',txt:'#7dd3fc',cols:8},
+  {label:'CASH-OUT &amp; LTV',bg:'#3b0764',txt:'#c4b5fd',cols:3},
+  {label:'FINANCING CHOICE',bg:'#064e3b',txt:'#6ee7b7',cols:4},
+  {label:'RENT ROLL',bg:'#0c4a6e',txt:'#b3e5fc',cols:4},
+  {label:'ITIA &amp; DSCR',bg:'#4a2080',txt:'#e9d5ff',cols:5},
+  {label:'SAVINGS',bg:'#065f46',txt:'#6ee7b7',cols:2},
+];
+
+const COL_HDRS=[
+  {l:'Lender',w:95,sec:0},{l:'Old Balance',w:90,sec:0},
+  {l:'Old Rate',w:62,sec:0},{l:'New Rate',w:70,sec:0,inp:true},
+  {l:'NEO Comp %',w:58,sec:0,inp:true},
+  // Closing (7)
+  {l:'NEO Comp $',w:80,sec:1},{l:'Lender Credit',w:82,sec:1,inp:true},
+  {l:'Old Payoff Per Diem',w:78,sec:1},{l:'New Prepaid Interest',w:78,sec:1},
+  {l:'Escrow',w:70,sec:1,inp:true},{l:'Title',w:70,sec:1,inp:true},
+  {l:'Admin UW',w:72,sec:1},
+  {l:'Total Closing Costs',w:88,sec:1},
+  // C/O (3)
+  {l:'Prop Value',w:90,sec:2,inp:true},
+  {l:'Max C/O (LTV %)',w:90,sec:2},
+  {l:'C/O Requested',w:82,sec:2,inp:true},
+  // Choice (4)
+  {l:'Closing Choice',w:148,sec:3},
+  {l:'New Balance',w:90,sec:3},
+  {l:'New IO Payment /mo',w:88,sec:3},
+  {l:'Cash Position',w:110,sec:3},
+  // Rent (4)
+  {l:'Unit 1 Rent',w:72,sec:4,inp:true},
+  {l:'Unit 2 Rent',w:72,sec:4,inp:true},
+  {l:'Unit 3 Rent',w:72,sec:4,inp:true},
+  {l:'Total Rent /mo',w:80,sec:4},
+  // ITIA (5)
+  {l:'Tax /mo',w:68,sec:5,inp:true},{l:'Ins /mo',w:68,sec:5,inp:true},
+  {l:'Total ITIA /mo',w:80,sec:5},
+  {l:'DSCR',w:58,sec:5},{l:'Status',w:72,sec:5},
+  // Savings (2)
+  {l:'Monthly Cash Flow',w:84,sec:6},{l:'Annual Cash Flow',w:84,sec:6},
+];
+
+const SEC_STYLES=[
+  '#0d3b6e','#1a3660','#3b0764','#064e3b','#0c4a6e','#4a2080','#065f46'
+];
+
+function buildTable(){
+  // Section band row
+  let sHTML=`<th class="stk" style="background:var(--navy);border-right:2px solid var(--blue)"></th>`;
+  SECTIONS.forEach(s=>{
+    sHTML+=`<th colspan="${s.cols}" style="background:${s.bg};color:${s.txt};font-size:8.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;vertical-align:middle">${s.label}</th>`;
+  });
+  document.getElementById('sectionRow').style.height='22px';
+  document.getElementById('sectionRow').innerHTML=sHTML;
+
+  // Column header row — all th get same explicit height via tr, text wraps inside
+  let cHTML=`<th class="stk" style="background:var(--navy);color:var(--blue);font-size:8px;font-weight:700;padding:6px 8px 5px;vertical-align:bottom;line-height:1.3">PROPERTY</th>`;
+  COL_HDRS.forEach(c=>{
+    const bg=SEC_STYLES[c.sec];
+    const color=c.inp?'#fff':'rgba(255,255,255,.75)';
+    const sz=c.inp?8.5:8;
+    cHTML+=`<th style="width:${c.w}px;background:${bg};color:${color};font-size:${sz}px;padding:6px 5px 5px;vertical-align:bottom;white-space:normal;line-height:1.3;word-break:break-word;text-align:center">${c.l}</th>`;
+  });
+  document.getElementById('colHdrs').innerHTML=cHTML;
+
+  // Rows
+  let rHTML='';
+  PROPS.forEach((p,i)=>{
+    const s=state[i];
+    const bg=i%2===0?'var(--bg3)':'var(--card)';
+    const lselClass=s.lender==='LendSure'?'lsel ls':s.lender==='ClearEdge'?'lsel ce':'lsel';
+    rHTML+=`<tr data-i="${i}" style="background:${bg}">`;
+    rHTML+=`<td class="stk" style="background:${i%2===0?'var(--bg3)':'var(--card)'}">
+      <div style="display:flex;align-items:flex-start;gap:7px">
+        <input type="checkbox" class="refi-check" id="active-${i}" checked onchange="toggleActive(${i},this.checked)">
+        <div>
+          <div class="paddr">${p.addr}</div>
+          <div class="pentity">${p.entity}</div>
+          ${p.ppp?'<span class="ppptag">⚠ PPP — verify</span>':''}
+        </div>
+      </div>
+    </td>`;
+    // Lender
+    rHTML+=`<td><select class="${lselClass}" data-i="${i}" data-f="lender" onchange="onLenderChange(${i},this.value)">
+      <option ${s.lender==='Acra'?'selected':''}>Acra</option>
+      <option ${s.lender==='LendSure'?'selected':''}>LendSure</option>
+      <option ${s.lender==='ClearEdge'?'selected':''}>ClearEdge</option>
+    </select></td>`;
+    rHTML+=`<td class="cv hi">${fmt(p.oldBal)}</td>`;
+    rHTML+=`<td style="text-align:center"><span class="${p.oldRate>.077?'cv neg':'cv dim'}">${fmtP(p.oldRate*100,3)}</span></td>`;
+    rHTML+=`<td><input class="ci rate" data-i="${i}" data-f="newRate" id="rate-${i}" value="${s.newRate}" oninput="onRateInput(${i},this.value)" style="width:62px"></td>`;
+    rHTML+=`<td><input class="ci rate" data-i="${i}" data-f="compPct" value="${s.compPct}" style="width:50px"></td>`;
+    // Closing costs
+    rHTML+=`<td><span id="comp-${i}" class="cv comp-c">—</span></td>`;
+    rHTML+=`<td><input class="ci cred" data-i="${i}" data-f="lenderCredit" value="$${s.lenderCredit.toLocaleString()}" style="width:72px"></td>`;
+    rHTML+=`<td><span id="opd-${i}" class="cv dim">—</span></td>`;
+    rHTML+=`<td><span id="prep-${i}" class="cv dim">—</span></td>`;
+    rHTML+=`<td><input class="ci" data-i="${i}" data-f="escrow" value="$${s.escrow.toLocaleString()}" style="width:60px"></td>`;
+    rHTML+=`<td><input class="ci" data-i="${i}" data-f="title" value="$${s.title.toLocaleString()}" style="width:60px"></td>`;
+    rHTML+=`<td><span id="adminuw-${i}" class="cv dim">—</span></td>`;
+    rHTML+=`<td><span id="tcost-${i}" class="cv warn">—</span></td>`;
+    // C/O
+    rHTML+=`<td><input class="ci co" data-i="${i}" data-f="propVal" value="$${s.propVal.toLocaleString()}" style="width:82px"></td>`;
+    rHTML+=`<td><span id="maxco-${i}" class="cv">—</span></td>`;
+    rHTML+=`<td><input class="ci co" data-i="${i}" data-f="cashOut" value="$0" placeholder="$0" style="width:72px"></td>`;
+    // Choice
+    rHTML+=`<td style="min-width:148px">
+      <div class="cg">
+        <button class="cb act-roll" data-i="${i}" data-choice="roll" onclick="setChoice(${i},'roll')">Roll In</button>
+        <button class="cb" data-i="${i}" data-choice="co" onclick="setChoice(${i},'co')">C/O Covers</button>
+        <button class="cb" data-i="${i}" data-choice="tbl" onclick="setChoice(${i},'tbl')">Come to Table</button>
+      </div>
+    </td>`;
+    rHTML+=`<td><span id="newbal-${i}" class="cv hi">—</span></td>`;
+    rHTML+=`<td><span id="newint-${i}" class="cv hi">—</span></td>`;
+    rHTML+=`<td><span id="cash-${i}">—</span></td>`;
+    // Rent
+    rHTML+=`<td><input class="ci rent" data-i="${i}" data-f="u1" value="$${s.u1.toLocaleString()}" style="width:62px"></td>`;
+    rHTML+=`<td><input class="ci rent" data-i="${i}" data-f="u2" value="$${s.u2.toLocaleString()}" style="width:62px"></td>`;
+    rHTML+=`<td><input class="ci rent" data-i="${i}" data-f="u3" value="$${s.u3.toLocaleString()}" style="width:62px"></td>`;
+    rHTML+=`<td><span id="trent-${i}" class="cv">—</span></td>`;
+    // ITIA
+    rHTML+=`<td><input class="ci" data-i="${i}" data-f="tax" value="$${s.tax.toLocaleString()}" style="width:58px"></td>`;
+    rHTML+=`<td><input class="ci" data-i="${i}" data-f="ins" value="$${s.ins.toLocaleString()}" style="width:58px"></td>`;
+    rHTML+=`<td><span id="itia-${i}" class="cv">—</span></td>`;
+    rHTML+=`<td style="text-align:center"><span id="dscr-${i}" class="dn">—</span></td>`;
+    rHTML+=`<td style="text-align:center"><span id="status-${i}">—</span></td>`;
+    // Savings
+    rHTML+=`<td><span id="msav-${i}" class="cv pos">—</span></td>`;
+    rHTML+=`<td><span id="asav-${i}" class="cv pos">—</span></td>`;
+    rHTML+=`</tr>`;
+  });
+  document.getElementById('tableBody').innerHTML=rHTML;
+
+  // Totals row
+  const totCols=[
+    '',// lender
+    'tot-oldbal','tot-oldrate','tot-newrate','',// comp%
+    'tot-comp','tot-credit','tot-opd','tot-prep','tot-esc','tot-title','tot-adminuw','tot-tcost',
+    'tot-pv','tot-maxco','tot-co',
+    '','tot-newbal','tot-newint','tot-cash',
+    'tot-r1','tot-r2','tot-r3','tot-trent',
+    'tot-tax','tot-ins','tot-itia','tot-dscr','',
+    'tot-msav','tot-asav'
+  ];
+  let tHTML=`<td class="stk" style="background:var(--navy);color:var(--blue);font-weight:800;text-align:left;font-size:11px"><span id="tot-active-label">PORTFOLIO TOTALS</span></td>`;
+  totCols.forEach(id=>{
+    tHTML+=id?`<td id="${id}">—</td>`:`<td></td>`;
+  });
+  document.getElementById('totRow').innerHTML=tHTML;
+}
+
+// ── RENDER PROPERTY ───────────────────────────────────────────────────────────
+function set(id,html){const el=document.getElementById(id);if(el)el.innerHTML=html;}
+
+function renderProp(i,r){
+  const s=state[i];
+  // Sync rate input display if ClearEdge auto-adjusted it
+  const rateInput=document.getElementById(`rate-${i}`);
+  if(rateInput&&!rateInput.matches(':focus')&&parseFloat(rateInput.value)!==s.newRate){
+    rateInput.value=s.newRate;
+  }
+  set(`comp-${i}`,`<span class="cv comp-c">${fmt(r.compDollar)}${s.lender==='ClearEdge'?'<span style="color:#f59e0b;font-size:10px;vertical-align:super">*</span>':''}</span>`);
+  set(`opd-${i}`,`<span class="cv dim">${fmt(r.oldPerDiem,0)}</span>`);
+  set(`adminuw-${i}`,`<span class="cv dim">${fmt(r.adminUw,0)}</span>`);
+  set(`prep-${i}`,`<span class="cv dim">${fmt(r.newPrepaid,0)}</span>`);
+  set(`tcost-${i}`,`<span class="cv warn">${fmt(r.totalCosts)}</span>`);
+  set(`maxco-${i}`,`<span class="${r.maxCO>0?'cv pos':'cv dim'}">${fmt(r.maxCO)}</span>`);
+  set(`newbal-${i}`,`<span class="cv hi">${fmt(r.newBal)}</span>`);
+  set(`newint-${i}`,`<span class="cv hi">${fmt(r.newInt,2)}</span>`);
+
+  // Cash position — simple, clean
+  let cashHTML='';
+  if(s.choice==='roll'){
+    cashHTML=`<span style="color:var(--green);font-weight:700">$0 to close</span>`;
+    if(s.cashOut>0) cashHTML+=`<br><span class="cv purple">Receive: ${fmt(r.cashNet)}</span>`;
+  } else if(s.choice==='co'){
+    cashHTML=r.clientBrings>0
+      ?`<span style="color:var(--amber);font-weight:700">Bring: ${fmt(r.clientBrings)}</span><br><span class="cv purple">Net C/O: ${fmt(r.cashNet)}</span>`
+      :`<span style="color:var(--green);font-weight:700">$0 to close</span><br><span class="cv purple">Net C/O: ${fmt(r.cashNet)}</span>`;
+  } else {
+    cashHTML=`<span style="color:var(--amber);font-weight:700">Bring: ${fmt(r.clientBrings)}</span>`;
+    if(s.cashOut>0) cashHTML+=`<br><span class="cv purple">Receive: ${fmt(r.cashNet)}</span>`;
+  }
+  set(`cash-${i}`,cashHTML);
+
+  set(`trent-${i}`,`<span class="cv">${fmt(r.totalRent)}</span>`);
+  set(`itia-${i}`,`<span class="cv">${fmt(r.itia,0)}</span>`);
+
+  const dc=r.dscr>=1.25?'dn d-str':r.dscr>=1.1?'dn d-pass':r.dscr>=1.0?'dn d-thin':'dn d-fail';
+  set(`dscr-${i}`,`<span class="${dc}">${r.totalRent>0?r.dscr.toFixed(2):'—'}</span>`);
+  const badge=r.totalRent===0?'<span class="sbadge sb-thin">No Rent</span>':
+    r.dscr>=1.25?'<span class="sbadge sb-str">Strong ✓</span>':
+    r.dscr>=1.1?'<span class="sbadge sb-pass">Pass ✓</span>':
+    r.dscr>=1.0?'<span class="sbadge sb-thin">Thin ⚠</span>':
+    '<span class="sbadge sb-fail">Fail ✗</span>';
+  set(`status-${i}`,badge);
+  set(`msav-${i}`,`<span class="${r.monthlySav>=0?'cv pos':'cv neg'}">${fmt(r.monthlySav,0)}</span>`);
+  set(`asav-${i}`,`<span class="${r.annualSav>=0?'cv pos':'cv neg'}">${fmt(r.annualSav)}</span>`);
+
+  // Choice buttons
+  document.querySelectorAll(`[data-i="${i}"][data-choice]`).forEach(b=>{
+    b.className='cb';
+    if(b.dataset.choice===s.choice) b.className='cb act-'+s.choice;
+    if(b.dataset.choice==='co') b.disabled=s.cashOut<=0;
+  });
+
+  // Lender select style
+  const sel=document.querySelector(`select[data-i="${i}"]`);
+  if(sel){
+    sel.className=s.lender==='LendSure'?'lsel ls':s.lender==='ClearEdge'?'lsel ce':'lsel';
+  }
+}
+
+// ── TOTALS ────────────────────────────────────────────────────────────────────
+function renderTotals(results){
+  const sum=f=>results.reduce((a,r,i)=>active[i]?a+r[f]:a,0);
+  const totOB=PROPS.reduce((a,p,i)=>active[i]?a+p.oldBal:a,0);
+  const bldOld=totOB>0?PROPS.reduce((a,p,i)=>active[i]?a+p.oldBal*p.oldRate:a,0)/totOB:0;
+  const totNB=sum('newBal');
+  const bldNew=totNB>0?results.reduce((a,r,i)=>active[i]?a+r.newBal*state[i].newRate/100:a,0)/totNB:0;
+  const totCO=state.reduce((a,s,i)=>active[i]?a+s.cashOut:a,0);
+  const totBring=sum('clientBrings');
+  const totCashNet=sum('cashNet');
+  const tRent=sum('totalRent');
+  const tITIA=sum('itia');
+  const portDSCR=tITIA>0&&tRent>0?tRent/tITIA:0;
+
+  const tset=(id,v,cls='')=>{const el=document.getElementById(id);if(el)el.innerHTML=`<span${cls?' class="'+cls+'"':''}>${v}</span>`;};
+  tset('tot-oldbal',fmt(totOB));
+  tset('tot-oldrate',fmtP(bldOld*100));
+  tset('tot-newrate',fmtP(bldNew*100));
+  tset('tot-comp',fmt(sum('compDollar')));
+  tset('tot-credit',fmt(state.reduce((a,s,i)=>active[i]?a+s.lenderCredit:a,0)));
+  tset('tot-opd',fmt(sum('oldPerDiem')));
+  tset('tot-prep',fmt(sum('newPrepaid')));
+  tset('tot-esc',fmt(state.reduce((a,s,i)=>active[i]?a+s.escrow:a,0)));
+  tset('tot-title',fmt(state.reduce((a,s,i)=>active[i]?a+s.title:a,0)));
+  tset('tot-adminuw',fmt(state.reduce((a,s)=>a+(s.adminUw||0),0)));
+  document.getElementById('tot-tcost').innerHTML=`<span style="color:#fbbf24;font-weight:700">${fmt(sum('totalCosts'))}</span>`;
+  tset('tot-pv',fmt(state.reduce((a,s,i)=>active[i]?a+s.propVal:a,0)));
+  document.getElementById('tot-maxco').innerHTML=`<span style="color:#c4b5fd;font-weight:700">${fmt(sum('maxCO'))}</span>`;
+  tset('tot-co',fmt(totCO));
+  document.getElementById('tot-newbal').innerHTML=`<span style="font-weight:800;font-size:13px">${fmt(totNB)}</span>`;
+  document.getElementById('tot-newint').innerHTML=`<span style="font-weight:700">${fmt(sum('newInt'),0)}</span>`;
+  const cashHTML=totBring>0?`<span style="color:var(--amber);font-weight:700">${fmt(totBring)}</span>`:
+    totCO>0?`<span style="color:var(--green);font-weight:700">$0 to close</span><br><span style="color:var(--purple);font-weight:700">Net C/O: ${fmt(totCashNet)}</span>`:
+    `<span style="color:var(--green);font-weight:700">$0 to close</span>`;
+  document.getElementById('tot-cash').innerHTML=cashHTML;
+  tset('tot-r1',fmt(state.reduce((a,s,i)=>active[i]?a+s.u1:a,0)));
+  tset('tot-r2',fmt(state.reduce((a,s,i)=>active[i]?a+s.u2:a,0)));
+  tset('tot-r3',fmt(state.reduce((a,s,i)=>active[i]?a+s.u3:a,0)));
+  document.getElementById('tot-trent').innerHTML=`<span style="font-weight:700">${fmt(tRent)}</span>`;
+  tset('tot-tax',fmt(state.reduce((a,s,i)=>active[i]?a+s.tax:a,0)));
+  tset('tot-ins',fmt(state.reduce((a,s,i)=>active[i]?a+s.ins:a,0)));
+  document.getElementById('tot-itia').innerHTML=`<span style="font-weight:700">${fmt(tITIA,0)}</span>`;
+  const dc=portDSCR>=1.25?'dn d-str':portDSCR>=1.1?'dn d-pass':portDSCR>=1.0?'dn d-thin':'dn d-fail';
+  document.getElementById('tot-dscr').innerHTML=`<span class="${dc}">${tRent>0?portDSCR.toFixed(2):'—'}</span>`;
+  document.getElementById('tot-msav').innerHTML=`<span style="font-weight:700">${fmt(sum('monthlySav'),0)}</span>`;
+  document.getElementById('tot-asav').innerHTML=`<span style="font-weight:800;font-size:14px;color:#4ade80">${fmt(sum('annualSav'))}</span>`;
+
+  return{totNB,totOB,bldOld,bldNew,totCO,totBring,totCashNet,
+    totMSav:sum('monthlySav'),totASav:sum('annualSav'),
+    tRent,tITIA,portDSCR,totOldInt:sum('oldInt'),totNewInt:sum('newInt')};
+}
+
+// ── SUMMARY ───────────────────────────────────────────────────────────────────
+function renderSummary(t){
+  document.getElementById('summaryStrip').innerHTML=`
+    <div class="ss"><div class="ss-label">Monthly Cash Flow</div><div class="ss-val green">${fmt(t.totMSav,0)}</div><div class="ss-sub">vs. current loans</div></div>
+    <div class="ss"><div class="ss-label">Annual Cash Flow</div><div class="ss-val green">${fmt(t.totASav)}</div><div class="ss-sub">Generated, Year 1</div></div>
+    <div class="ss"><div class="ss-label">New Portfolio Payment</div><div class="ss-val blue">${fmt(t.totNewInt,0)}/mo</div><div class="ss-sub">Interest only, all 8 loans</div></div>
+    <div class="ss"><div class="ss-label">Total Cash-Out</div><div class="ss-val purple">${fmt(state.reduce((a,s,i)=>active[i]?a+s.cashOut:a,0))}</div><div class="ss-sub">Across portfolio</div></div>
+    <div class="ss"><div class="ss-label">Portfolio DSCR</div><div class="ss-val ${t.portDSCR>=1.25?'green':t.portDSCR>=1.1?'blue':'amber'}">${t.tRent>0?t.portDSCR.toFixed(2):'—'}</div><div class="ss-sub">Rent ÷ ITIA</div></div>
+    <div class="ss"><div class="ss-label">Client Closing Position</div><div class="ss-val ${t.totBring>0?'amber':'green'}">${t.totBring>0?fmt(t.totBring):'$0'}</div><div class="ss-sub">${t.totBring>0?'Total to bring to table':'All costs handled'}</div></div>
+  `;
+}
+
+// ── 5-YEAR PROJECTION ─────────────────────────────────────────────────────────
+function renderProjection(t){
+  const deploy=parse(document.getElementById('g-deploy').value)/100;
+  const appr=parse(document.getElementById('g-appr').value)/100;
+
+  // Total current portfolio value
+  const totPropVal=state.reduce((a,s,i)=>active[i]?a+s.propVal:a,0);
+  // Total new balance (debt stays flat on IO)
+  const totNewBal=t.totNB;
+
+  // ── Generated cash flow table ──────────────────────────────────────────────
+  let sHTML=`<thead><tr><th>Year</th><th>Monthly Cash Flow</th><th>Annual Cash Flow</th><th>Cumulative</th></tr></thead><tbody>`;
+  let cum=0;
+  for(let y=1;y<=5;y++){
+    cum+=t.totASav;
+    sHTML+=`<tr${y===5?' class="yr5"':''}>`
+      +`<td>Year ${y}</td>`
+      +`<td>${fmt(t.totMSav,0)}</td>`
+      +`<td>${fmt(t.totASav)}</td>`
+      +`<td>${fmt(cum)}</td>`
+      +`</tr>`;
+  }
+  sHTML+=`</tbody>`;
+  document.getElementById('projSav').innerHTML=sHTML;
+  // Compact version for print
+  const projSavPrint=document.getElementById('projSavPrint');
+  if(projSavPrint){
+    let ph=`<thead><tr><th>Year</th><th>Annual</th><th>Cumulative</th></tr></thead><tbody>`;
+    let pc=0;for(let y=1;y<=5;y++){pc+=t.totASav;ph+=`<tr${y===5?' class="yr5"':''}><td>Yr ${y}</td><td>${fmt(t.totASav)}</td><td>${fmt(pc)}</td></tr>`;}
+    projSavPrint.innerHTML=ph+`</tbody>`;
+  }
+
+  // ── Cash-out deployment table (compounded) ─────────────────────────────────
+  const totCO=state.reduce((a,s,i)=>active[i]?a+s.cashOut:a,0);
+  let coHTML=`<thead><tr><th>Year</th><th>Capital Deployed</th><th>Value (${(deploy*100).toFixed(1)}% cpd)</th><th>Return to Date</th><th>+ Cash Flow</th><th>Combined</th></tr></thead><tbody>`;
+  if(totCO<=0){
+    coHTML+=`<tr class="empty"><td colspan="6">No cash-out requested. Enter a cash-out amount per property above to model deployment return.</td></tr>`;
+  } else {
+    let cumSavCO=0;
+    for(let y=1;y<=5;y++){
+      // Compound: value of deployed capital after y years
+      const deployedVal=totCO*Math.pow(1+deploy,y);
+      const returnToDate=deployedVal-totCO;
+      cumSavCO+=t.totASav;
+      const combined=returnToDate+cumSavCO;
+      coHTML+=`<tr${y===5?' class="yr5"':''}>`
+        +`<td>Year ${y}</td>`
+        +`<td>${y===1?fmt(totCO):'—'}</td>`
+        +`<td>${fmt(deployedVal)}</td>`
+        +`<td>${fmt(returnToDate)}</td>`
+        +`<td>${fmt(cumSavCO)}</td>`
+        +`<td style="font-weight:700;color:#4ade80">${fmt(combined)}</td>`
+        +`</tr>`;
+    }
+  }
+  coHTML+=`</tbody>`;
+  document.getElementById('projCO').innerHTML=coHTML;
+
+  // ── Appreciation table ─────────────────────────────────────────────────────
+  let apHTML=`<thead><tr><th>Year</th><th>Portfolio Value</th><th>Debt (IO — flat)</th><th>Equity</th><th>Equity Gain</th></tr></thead><tbody>`;
+  const startingEquity=totPropVal-totNewBal;
+  for(let y=1;y<=5;y++){
+    const portVal=totPropVal*Math.pow(1+appr,y);
+    const equity=portVal-totNewBal;  // IO: debt stays flat
+    const equityGain=equity-startingEquity;
+    apHTML+=`<tr${y===5?' class="yr5"':''}>`
+      +`<td>Year ${y}</td>`
+      +`<td>${fmt(portVal)}</td>`
+      +`<td style="color:var(--muted)">${fmt(totNewBal)}</td>`
+      +`<td>${fmt(equity)}</td>`
+      +`<td style="color:#4ade80;font-weight:700">${fmt(equityGain)}</td>`
+      +`</tr>`;
+  }
+  apHTML+=`</tbody>`;
+  document.getElementById('projAppr').innerHTML=apHTML;
+}
+
+// ── MAIN RECALC ───────────────────────────────────────────────────────────────
+function recalcAll(){
+  const results=PROPS.map((_,i)=>calcProp(i));
+  results.forEach((r,i)=>renderProp(i,r));
+  const t=renderTotals(results);
+  renderSummary(t);
+  renderProjection(t);
+}
+
+// ── LENDER RATE LOGIC ─────────────────────────────────────────────────────────
+function getLenderRate(lender){
+  const map={Acra:'lr-acra',LendSure:'lr-lendsure',ClearEdge:'lr-clearedge'};
+  return parse(document.getElementById(map[lender])?.value||'6.499');
+}
+
+function applyLenderRate(lender){
+  const rate=getLenderRate(lender);
+  PROPS.forEach((_,i)=>{
+    if(state[i].lender===lender&&!rateOverridden[i]){
+      state[i].newRate=rate;
+      const el=document.getElementById(`rate-${i}`);
+      if(el) el.value=rate;
+    }
+  });
+  recalcAll();
+}
+
+function onLenderChange(i,lender){
+  state[i].lender=lender;
+  state[i].maxLtv=lender==='ClearEdge'?0.75:lender==='Acra'?0.70:0.65;
+  state[i].adminUw=DEF_ADMIN_UW[lender]||0;
+  state[i].lenderCredit=lender==='ClearEdge'?1100:0;
+  // Only update rate if not manually overridden
+  if(!rateOverridden[i]){
+    const rate=getLenderRate(lender);
+    state[i].newRate=rate;
+    const el=document.getElementById(`rate-${i}`);
+    if(el) el.value=rate;
+  }
+  // Update select style
+  const sel=document.querySelector(`select[data-i="${i}"]`);
+  if(sel) sel.className=lender==='LendSure'?'lsel ls':lender==='ClearEdge'?'lsel ce':'lsel';
+  recalcAll();
+}
+
+function onRateInput(i,val){
+  state[i].newRate=parse(val);
+  rateOverridden[i]=true;
+  recalcAll();
+}
+
+// ── GLOBAL DEFAULTS ───────────────────────────────────────────────────────────
+function applyGlobal(){
+  const gComp=parse(document.getElementById('g-comp').value);
+  const gCred=parse(document.getElementById('g-credit').value);
+  const gEsc=parse(document.getElementById('g-escrow').value);
+  const gTitle=parse(document.getElementById('g-title').value);
+  const gPV=parse(document.getElementById('g-propval').value);
+  const gTax=parse(document.getElementById('g-tax').value);
+  const gIns=parse(document.getElementById('g-ins').value);
+
+  PROPS.forEach((_,i)=>{
+    if(gComp>0)  state[i].compPct=gComp;
+    if(gCred>0)  state[i].lenderCredit=gCred;
+    if(gEsc>0)   state[i].escrow=gEsc;
+    if(gTitle>0) state[i].title=gTitle;
+    if(gPV>0)    state[i].propVal=gPV;
+    if(gTax>0)   state[i].tax=gTax;
+    if(gIns>0)   state[i].ins=gIns;
+
+    const syncDollar=(f,v)=>{const el=document.querySelector(`[data-i="${i}"][data-f="${f}"]`);if(el&&el.tagName==='INPUT')el.value='$'+v.toLocaleString();};
+    const syncRaw=(f,v)=>{const el=document.querySelector(`[data-i="${i}"][data-f="${f}"]`);if(el&&el.tagName==='INPUT')el.value=v;};
+    if(gComp>0)  syncRaw('compPct',gComp);
+    if(gCred>0)  syncDollar('lenderCredit',gCred);
+    if(gEsc>0)   syncDollar('escrow',gEsc);
+    if(gTitle>0) syncDollar('title',gTitle);
+    if(gPV>0)    syncDollar('propVal',gPV);
+    if(gTax>0)   syncDollar('tax',gTax);
+    if(gIns>0)   syncDollar('ins',gIns);
+  });
+  recalcAll();
+}
+
+// ── ACTIVE TOGGLE ────────────────────────────────────────────────────────────
+function toggleActive(i,checked){
+  active[i]=checked;
+  // Visually dim the row
+  const row=document.querySelector(`tr[data-i="${i}"]`);
+  if(row) row.classList.toggle('prop-inactive',!checked);
+  // Update totals label
+  const n=active.filter(Boolean).length;
+  const lbl=document.getElementById('tot-active-label');
+  if(lbl) lbl.textContent=`TOTALS (${n} of 8 loans)`;
+  recalcAll();
+}
+
+// ── CHOICE ────────────────────────────────────────────────────────────────────
+function setChoice(i,choice){
+  if(choice==='co'&&state[i].cashOut<=0) return;
+  state[i].choice=choice;
+  recalcAll();
+}
+
+// ── EVENT DELEGATION ──────────────────────────────────────────────────────────
+document.addEventListener('input',e=>{
+  const t=e.target,i=parseInt(t.dataset.i),f=t.dataset.f;
+  if(isNaN(i)||!f||f==='lender'||f==='newRate') return;
+  const v=parse(t.value);
+  state[i][f]=v;
+  if(f==='cashOut'){
+    if(v<=0&&state[i].choice==='co') state[i].choice='roll';
+    // Sync adjuster card
+    const adj=document.getElementById(`coadj-${i}`);
+    if(adj) adj.value=v>0?'$'+v.toLocaleString():'$0';
+  }
+  recalcAll();
+});
+
+document.addEventListener('change',e=>{
+  const t=e.target,i=parseInt(t.dataset.i),f=t.dataset.f;
+  if(isNaN(i)||!f||f==='lender'||f==='newRate') return;
+  const noFmt=['compPct'];
+  if(!noFmt.includes(f)){
+    const v=parse(t.value);
+    if(v>=0) t.value='$'+v.toLocaleString();
+  }
+  recalcAll();
+});
+
+
+// ── LIVE CONFIG FROM ONEDRIVE ─────────────────────────────────────────────────
+async function loadConfig(){
+  try{
+    const res=await fetch('/.netlify/functions/config');
+    if(!res.ok) throw new Error(''+res.status);
+    const json=await res.json();
+    if(!json.data) throw new Error('no data');
+    const wb=XLSX.read(json.data,{type:'base64'});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1});
+    const cfg={};
+    rows.forEach(r=>{if(r[0]&&r[1]!==undefined)cfg[String(r[0]).trim()]=r[1];});
+    const g=(k,fb)=>cfg[k]!==undefined?Number(cfg[k]):fb;
+    const gs=(k,fb)=>cfg[k]!==undefined?String(cfg[k]):fb;
+    const acraRate=g('acra_rate',6.625),ceRateRT=g('clearedge_rate_rt',6.625);
+    const ceRateCO=g('clearedge_rate_co',6.750),lsRate=g('lendsure_rate',6.875);
+    const compPct=g('comp_pct',1.50),escrow=g('escrow',1195),title=g('title',1005);
+    const auAcra=g('admin_uw_acra',1895),auCE=g('admin_uw_clearedge',2174),auLS=g('admin_uw_lendsure',2150);
+    const credAcra=g('credit_acra',0),credCE=g('credit_clearedge',1100),credLS=g('credit_lendsure',0);
+    const propVal=g('default_prop_value',2000000),propTax=g('default_prop_tax',1426);
+    const insurance=g('default_insurance',575),u1=g('default_rent_u1',4500);
+    const u2=g('default_rent_u2',3750),u3=g('default_rent_u3',3750);
+    const appr=g('appreciation_rate',5.20),deploy=g('deployment_return',8.00);
+    const dateQuote=gs('rate_quote_date',''),summary=gs('executive_summary','');
+    DEF_RATES.Acra=acraRate;DEF_RATES.LendSure=lsRate;DEF_RATES.ClearEdge=ceRateRT;
+    window._ceRateCO=ceRateCO;
+    PROPS.forEach((_,i)=>{
+      const ldr=state[i].lender;
+      if(!rateOverridden[i]) state[i].newRate=ldr==='Acra'?acraRate:ldr==='ClearEdge'?ceRateRT:lsRate;
+      state[i].compPct=compPct;state[i].escrow=escrow;state[i].title=title;
+      state[i].adminUw=ldr==='Acra'?auAcra:ldr==='ClearEdge'?auCE:auLS;
+      state[i].lenderCredit=ldr==='Acra'?credAcra:ldr==='ClearEdge'?credCE:credLS;
+      state[i].propVal=propVal;state[i].tax=propTax;state[i].ins=insurance;
+      state[i].u1=u1;state[i].u2=u2;state[i].u3=u3;
+    });
+    const apprEl=document.getElementById('g-appr');if(apprEl)apprEl.value=appr;
+    const deployEl=document.getElementById('g-deploy');if(deployEl)deployEl.value=deploy;
+    if(dateQuote){const hdrP=document.querySelector('.hdr-left p');if(hdrP)hdrP.innerHTML=hdrP.innerHTML.replace(/Rate Quote:[^|]*/,'Rate Quote: '+dateQuote+' ');}
+    if(summary){const el=document.getElementById('execSummary');if(el)el.textContent=summary;}
+    const badge=document.getElementById('config-badge');
+    if(badge){badge.textContent='Config updated: '+dateQuote;badge.style.color='#4ade80';}
+  }catch(err){
+    console.warn('Config load failed — using defaults:',err.message);
+    const badge=document.getElementById('config-badge');
+    if(badge){badge.textContent='Using local defaults';badge.style.color='#f59e0b';}
+  }
+}
+
+// ── TABLE BUILT ON LOAD (charts/map init after libraries load below) ──────────
+buildTable();
+// Apply default inactive rows (Bellflower and Dashwood)
+[3,5].forEach(i=>{
+  const row=document.querySelector(`tr[data-i="${i}"]`);
+  if(row) row.classList.add('prop-inactive');
+  const cb=document.getElementById(`active-${i}`);
+  if(cb) cb.checked=false;
+});
+// Set default totals label
+const initLbl=document.getElementById('tot-active-label');
+if(initLbl) initLbl.textContent='TOTALS (6 of 8 loans)';
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── MAP ───────────────────────────────────────────────────────────────────────
+let _map=null, _mapMarkers=[];
+
+function initMap(){
+  if(_map) return;
+  _map=L.map('portfolioMap',{zoomControl:true}).setView([33.856,-118.131],14);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; OpenStreetMap &copy; CartoDB',maxZoom:19
+  }).addTo(_map);
+}
+
+function updateMapMarkers(){
+  if(!_map) initMap();
+  _mapMarkers.forEach(m=>m.remove());
+  _mapMarkers=[];
+  PROPS.forEach((p,i)=>{
+    const s=state[i];
+    const r=calcProp(i);
+    const dscrStr=r.totalRent>0?r.dscr.toFixed(2)+'x':'No rent entered';
+    const dscrColor=r.dscr>=1.25?'#22c55e':r.dscr>=1.1?'#5bcbf5':r.dscr>=1.0?'#f59e0b':'#ef4444';
+    const lenderColor=s.lender==='ClearEdge'?'#a78bfa':s.lender==='LendSure'?'#6ee7b7':'#93c5fd';
+
+    const icon=L.divIcon({
+      className:'',
+      html:`<div style="
+        background:${lenderColor};color:#0a2540;
+        font-family:Montserrat,sans-serif;font-weight:800;font-size:9px;
+        padding:4px 8px;border-radius:20px;white-space:nowrap;
+        box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:pointer;
+        border:2px solid rgba(255,255,255,.3)
+      ">${p.addr.split(' ').slice(0,2).join(' ')}</div>`,
+      iconAnchor:[40,12]
+    });
+
+    const popup=L.popup({maxWidth:280,className:'dark-popup'}).setContent(`
+      <div style="font-family:Montserrat,sans-serif;font-size:11px;background:#0f2035;color:#e2eaf2;padding:14px;border-radius:8px;min-width:240px">
+        <div style="font-weight:800;font-size:13px;color:#5bcbf5;margin-bottom:8px">${p.addr}</div>
+        <div style="color:#7b96b0;font-size:9px;margin-bottom:10px">${p.entity} &nbsp;|&nbsp; ${p.city}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div><div style="color:#7b96b0;font-size:8px">Lender</div><div style="font-weight:700;color:${lenderColor}">${s.lender}</div></div>
+          <div><div style="color:#7b96b0;font-size:8px">New Rate</div><div style="font-weight:700">${s.newRate.toFixed(3)}%</div></div>
+          <div><div style="color:#7b96b0;font-size:8px">Current Balance</div><div style="font-weight:700">${fmt(p.oldBal)}</div></div>
+          <div><div style="color:#7b96b0;font-size:8px">New Balance</div><div style="font-weight:700;color:#93c5fd">${fmt(r.newBal)}</div></div>
+          <div><div style="color:#7b96b0;font-size:8px">New IO Payment</div><div style="font-weight:700">${fmt(r.newInt,2)}/mo</div></div>
+          <div><div style="color:#7b96b0;font-size:8px">Monthly Cash Flow</div><div style="font-weight:700;color:#22c55e">${fmt(r.monthlySav,0)}/mo</div></div>
+          <div><div style="color:#7b96b0;font-size:8px">Max Cash-Out</div><div style="font-weight:700;color:#c4b5fd">${fmt(r.maxCO)}</div></div>
+          <div><div style="color:#7b96b0;font-size:8px">DSCR</div><div style="font-weight:800;color:${dscrColor}">${dscrStr}</div></div>
+          <div><div style="color:#7b96b0;font-size:8px">ZIP Forecast (5yr avg)</div><div style="font-weight:700;color:#f59e0b">${p.apprForecast}%/yr</div></div>
+          <div><div style="color:#7b96b0;font-size:8px">ZIP 5yr Hist.</div><div style="font-weight:700;color:#f59e0b">${p.apprHist5}%/yr</div></div>
+        </div>
+        ${p.ppp?'<div style="margin-top:8px;background:rgba(245,158,11,.2);color:#fbbf24;padding:4px 8px;border-radius:4px;font-size:9px;font-weight:700">⚠ Prepayment penalty — verify before quoting</div>':''}
+      </div>
+    `);
+
+    const marker=L.marker([p.lat,p.lng],{icon}).addTo(_map).bindPopup(popup);
+    _mapMarkers.push(marker);
+  });
+}
+
+// Style leaflet popup
+const mapStyle=document.createElement('style');
+mapStyle.textContent=`.dark-popup .leaflet-popup-content-wrapper{background:#0d1f33;border:1.5px solid #1e4060;padding:0;border-radius:10px;box-shadow:0 6px 28px rgba(0,0,0,.7)}.dark-popup .leaflet-popup-content{margin:0}.dark-popup .leaflet-popup-tip{background:#0d1f33}`;
+document.head.appendChild(mapStyle);
+
+// ── CHARTS ────────────────────────────────────────────────────────────────────
+let charts={};
+
+function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+
+function renderCharts(t){
+  const deploy=parse(document.getElementById('g-deploy').value)/100;
+  const appr=parse(document.getElementById('g-appr').value)/100;
+  const totCO=state.reduce((a,s,i)=>active[i]?a+s.cashOut:a,0);
+  const totPropVal=state.reduce((a,s,i)=>active[i]?a+s.propVal:a,0);
+  const totNewBal=t.totNB;
+
+  // 90712 vs 90713 split
+  const val712=PROPS.reduce((a,p,i)=>p.zip==='90712'?a+state[i].propVal:a,0);
+  const val713=PROPS.reduce((a,p,i)=>p.zip==='90713'?a+state[i].propVal:a,0);
+
+  const labels=['Year 1','Year 2','Year 3','Year 4','Year 5'];
+  const chartDefaults={
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{grid:{color:'rgba(255,255,255,.06)'},ticks:{color:'#7b96b0',font:{family:'Montserrat',size:10}}},
+      y:{grid:{color:'rgba(255,255,255,.06)'},ticks:{color:'#7b96b0',font:{family:'Montserrat',size:10},callback:v=>'$'+Math.round(v/1000)+'K'}}
+    }
+  };
+
+  // ── Chart 1: Generated Cash Flow ──────────────────────────────────────────
+  destroyChart('cf');
+  const cfCtx=document.getElementById('chartCF');
+  if(cfCtx){
+    const cfAnn=Array.from({length:5},()=>t.totASav);
+    let cum=0; const cfCum=Array.from({length:5},()=>{cum+=t.totASav;return cum;});
+    charts.cf=new Chart(cfCtx,{
+      type:'bar',
+      data:{
+        labels,
+        datasets:[
+          {label:'Annual Cash Flow',data:cfAnn,backgroundColor:'rgba(34,197,94,.25)',borderColor:'#22c55e',borderWidth:2,borderRadius:4},
+          {label:'Cumulative',data:cfCum,type:'line',borderColor:'#5bcbf5',backgroundColor:'rgba(91,203,245,.08)',fill:true,tension:.4,pointBackgroundColor:'#5bcbf5',pointRadius:4},
+        ]
+      },
+      options:{...chartDefaults,plugins:{
+        legend:{display:true,labels:{color:'#7b96b0',font:{family:'Montserrat',size:9},boxWidth:10}},
+        tooltip:{callbacks:{label:ctx=>'$'+Math.round(ctx.raw).toLocaleString()}}
+      }}
+    });
+  }
+
+  // ── Chart 2: Cash-Out Deployment ──────────────────────────────────────────
+  destroyChart('co');
+  const coCtx=document.getElementById('chartCO');
+  if(coCtx){
+    let datasets2;
+    if(totCO>0){
+      const coVals=Array.from({length:5},(_,i)=>totCO*Math.pow(1+deploy,i+1)-totCO);
+      const coTotal=Array.from({length:5},(_,i)=>totCO*Math.pow(1+deploy,i+1));
+      datasets2=[
+        {label:'Deployed Capital',data:Array(5).fill(totCO),backgroundColor:'rgba(167,139,250,.15)',borderColor:'rgba(167,139,250,.4)',borderWidth:1.5,borderDash:[4,4],tension:.4,type:'line',fill:false,pointRadius:0},
+        {label:'Compounded Value',data:coTotal,borderColor:'#a78bfa',backgroundColor:'rgba(167,139,250,.12)',fill:true,tension:.4,pointBackgroundColor:'#a78bfa',pointRadius:4,type:'line'},
+        {label:'Return',data:coVals,backgroundColor:'rgba(34,197,94,.2)',borderColor:'#22c55e',borderWidth:1.5,borderRadius:4},
+      ];
+    } else {
+      datasets2=[{label:'Enter cash-out above',data:[0,0,0,0,0],backgroundColor:'rgba(123,150,176,.1)',borderColor:'rgba(123,150,176,.2)',borderWidth:1}];
+    }
+    charts.co=new Chart(coCtx,{
+      type:'bar',
+      data:{labels,datasets:datasets2},
+      options:{...chartDefaults,plugins:{
+        legend:{display:true,labels:{color:'#7b96b0',font:{family:'Montserrat',size:9},boxWidth:10}},
+        tooltip:{callbacks:{label:ctx=>'$'+Math.round(ctx.raw).toLocaleString()}}
+      }}
+    });
+  }
+
+  // ── Chart 3 (was ZIP appreciation — removed) ──────────────────────────────
+
+  // ── Chart 4: Combined Wealth Impact ───────────────────────────────────────
+  destroyChart('combined');
+  const combCtx=document.getElementById('chartCombined');
+  if(combCtx){
+    let cumCF=0;
+    const cfData=Array.from({length:5},()=>{cumCF+=t.totASav;return cumCF;});
+    const apprGain=Array.from({length:5},(_,i)=>totPropVal*Math.pow(1+appr,i+1)-totPropVal);
+    const coReturn=totCO>0?Array.from({length:5},(_,i)=>totCO*Math.pow(1+deploy,i+1)-totCO):Array(5).fill(0);
+    const combined=Array.from({length:5},(_,i)=>cfData[i]+apprGain[i]+coReturn[i]);
+    charts.combined=new Chart(combCtx,{
+      type:'line',
+      data:{
+        labels,
+        datasets:[
+          {label:'Combined Total',data:combined,borderColor:'#5bcbf5',backgroundColor:'rgba(91,203,245,.08)',fill:true,tension:.4,pointBackgroundColor:'#5bcbf5',pointRadius:5,borderWidth:2.5,order:0},
+          {label:'Equity Gain',data:apprGain,backgroundColor:'rgba(34,197,94,.6)',borderColor:'transparent',borderRadius:3,order:1,type:'bar'},
+          {label:'Cash Flow',data:cfData,backgroundColor:'rgba(91,203,245,.5)',borderColor:'transparent',borderRadius:3,order:2,type:'bar'},
+          {label:'C/O Return',data:coReturn,backgroundColor:'rgba(167,139,250,.5)',borderColor:'transparent',borderRadius:3,order:3,type:'bar'},
+        ]
+      },
+      options:{...chartDefaults,
+        scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,
+          stacked:false,
+          ticks:{...chartDefaults.scales.y.ticks,callback:v=>'$'+Math.round(v/1000)+'K'}}},
+        plugins:{
+          legend:{display:true,labels:{color:'#7b96b0',font:{family:'Montserrat',size:9},boxWidth:10}},
+          tooltip:{mode:'index',callbacks:{label:ctx=>`${ctx.dataset.label}: $${Math.round(ctx.raw).toLocaleString()}`}}
+        }
+      }
+    });
+  }
+}
+
+// ── BEFORE / AFTER BANNER ────────────────────────────────────────────────────
+// ── CASH-OUT ADJUSTER ─────────────────────────────────────────────────────────
+function buildCOAdjuster(){
+  const container=document.getElementById('coAdjuster');
+  if(!container||container.dataset.built) return;
+  container.dataset.built='1';
+  let html='';
+  PROPS.forEach((p,i)=>{
+    const short=p.addr.split(' ').slice(0,2).join(' ');
+    html+=`<div style="display:flex;align-items:center;gap:8px">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:9px;font-weight:700;color:var(--blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${short}${p.ppp?' <span style="color:#f59e0b;font-size:8px">⚠</span>':''}</div>
+        <div style="font-size:8px;color:var(--muted)" id="coadj-max-${i}">Max: —</div>
+      </div>
+      <input
+        id="coadj-${i}"
+        class="ci co"
+        style="width:90px;flex-shrink:0;font-size:10px;padding:2px 6px"
+        value="$0"
+        placeholder="$0"
+        oninput="onCOAdjInput(${i},this.value)"
+        onchange="onCOAdjChange(${i},this.value)"
+      >
+    </div>`;
+  });
+  container.innerHTML=html;
+}
+
+function onCOAdjInput(i,val){
+  const v=parse(val);
+  state[i].cashOut=v;
+  if(v<=0&&state[i].choice==='co') state[i].choice='roll';
+  // Sync main table input
+  const mainInput=document.querySelector(`[data-i="${i}"][data-f="cashOut"]`);
+  if(mainInput) mainInput.value=v>0?'$'+v.toLocaleString():'$0';
+  window.recalcAll();
+}
+
+function onCOAdjChange(i,val){
+  const v=parse(val);
+  document.getElementById(`coadj-${i}`).value=v>0?'$'+v.toLocaleString():'$0';
+}
+
+function renderCOAdjuster(results){
+  // Build once if not already built
+  buildCOAdjuster();
+
+  let totCO=0, totMax=0;
+  results.forEach((r,i)=>{
+    if(!active[i]){const ad=document.getElementById(`coadj-${i}`);if(ad)ad.disabled=!active[i];return;}
+    totCO+=state[i].cashOut;
+    totMax+=r.maxCO;
+
+    // Sync adjuster input from state (in case main table changed it)
+    const adjInput=document.getElementById(`coadj-${i}`);
+    if(adjInput){
+      const cur=parse(adjInput.value);
+      if(cur!==state[i].cashOut) adjInput.value=state[i].cashOut>0?'$'+state[i].cashOut.toLocaleString():'$0';
+    }
+    // Update max display
+    const maxEl=document.getElementById(`coadj-max-${i}`);
+    if(maxEl) maxEl.textContent='Max: '+(r.maxCO>0?fmt(r.maxCO):'—');
+  });
+
+  const totEl=document.getElementById('coadj-total');
+  const maxEl=document.getElementById('coadj-max');
+  if(totEl) totEl.textContent=fmt(totCO);
+  if(maxEl) maxEl.textContent=fmt(totMax);
+}
+
+function renderBeforeAfter(t,results){
+  const s=id=>document.getElementById(id);
+  const totOldPmt=PROPS.reduce((a,p,i)=>active[i]?a+p.oldBal*p.oldRate/12:a,0);
+  const actOB=PROPS.reduce((a,p,i)=>active[i]?a+p.oldBal:a,0);
+  const bldOld=actOB>0?PROPS.reduce((a,p,i)=>active[i]?a+p.oldBal*p.oldRate:a,0)/actOB:0;
+  const totOldBal=PROPS.reduce((a,p,i)=>active[i]?a+p.oldBal:a,0);
+
+  if(s('ba-cur-bal'))  s('ba-cur-bal').textContent  = fmt(totOldBal);
+  if(s('ba-cur-rate')) s('ba-cur-rate').textContent = (bldOld*100).toFixed(3)+'%';
+  if(s('ba-cur-pmt'))  s('ba-cur-pmt').textContent  = fmt(totOldPmt,0)+'/mo';
+  if(s('ba-cur-ann'))  s('ba-cur-ann').textContent  = fmt(totOldPmt*12);
+  if(s('ba-cur-5yr'))  s('ba-cur-5yr').textContent  = fmt(totOldPmt*12*5);
+
+  if(s('ba-new-bal'))  s('ba-new-bal').textContent  = fmt(t.totNB);
+  if(s('ba-new-rate')) s('ba-new-rate').textContent = (t.bldNew*100).toFixed(3)+'%';
+  if(s('ba-new-pmt'))  s('ba-new-pmt').textContent  = fmt(t.totNewInt,0)+'/mo';
+  if(s('ba-new-ann'))  s('ba-new-ann').textContent  = fmt(t.totNewInt*12);
+  if(s('ba-new-5yr'))  s('ba-new-5yr').textContent  = fmt(t.totNewInt*12*5);
+
+  const deltaMo=totOldPmt-t.totNewInt;
+  const delta5=deltaMo*12*5;
+  const totCONet=results?results.reduce((a,r,i)=>active[i]?a+r.cashNet:a,0):0;
+  if(s('ba-new-co')) s('ba-new-co').textContent = fmt(totCONet);
+  if(s('ba-delta-mo'))  s('ba-delta-mo').textContent  = fmt(deltaMo,0)+'/mo';
+  if(s('ba-delta-ann')) s('ba-delta-ann').textContent = fmt(deltaMo*12);
+  if(s('ba-delta-5yr')) s('ba-delta-5yr').textContent = fmt(delta5);
+}
+
+
+
+// ── PATCH RECALCALL TO INCLUDE CHARTS + MAP, THEN INIT ───────────────────────
+// The original recalcAll is in the first script block. We monkey-patch it here
+// so every future call also updates charts and map.
+const _baseRecalc = window.recalcAll;
+window.recalcAll = function(){
+  // On first run, set default cash-out to max for ClearEdge, max for Acra with room
+  if(!_defaultCOApplied){
+    _defaultCOApplied=true;
+    // First pass: calculate max C/O for each property
+    const initResults=PROPS.map((_,i)=>calcProp(i));
+    initResults.forEach((r,i)=>{
+      if(state[i].lender==='ClearEdge'&&r.maxCO>0){
+        // Re-calc maxCO using the C/O rate (6.875%) since cashOut>0 triggers it
+        state[i].cashOut=1; // temp trigger so effectiveRate=6.875 kicks in
+        const r2=calcProp(i);
+        state[i].cashOut=Math.floor(r2.maxCO/1000)*1000;
+        state[i].choice='co';
+      }
+      // Acra: rate & term only, no cash-out
+    });
+    // Sync DOM inputs now that table has been built
+    PROPS.forEach((_,i)=>{
+      const mainInput=document.querySelector(`[data-i="${i}"][data-f="cashOut"]`);
+      if(mainInput) mainInput.value=state[i].cashOut>0?'$'+state[i].cashOut.toLocaleString():'$0';
+      const adjInput=document.getElementById(`coadj-${i}`);
+      if(adjInput) adjInput.value=state[i].cashOut>0?'$'+state[i].cashOut.toLocaleString():'$0';
+    });
+  }
+  const results = PROPS.map((_,i) => calcProp(i));
+  results.forEach((r,i) => renderProp(i,r));
+  const t = renderTotals(results);
+  renderSummary(t);
+  renderProjection(t);
+  renderBeforeAfter(t,results);
+  renderCostBreakdown(results);
+  renderCOAdjuster(results);
+  renderCharts(t);
+  updateMapMarkers();
+};
+// Also patch applyGlobal / applyLenderRate / setChoice which call old recalcAll
+// by name — they'll now call the patched version via window.recalcAll
+// since we replaced window.recalcAll above.
+
+// Init everything now that libraries are loaded
+window.recalcAll();
+loadConfig().then(()=>window.recalcAll());
+
+
+// ── COST BREAKDOWN CARD ─────────────────────────────────────────────────────
+function renderCostBreakdown(results){
+  const n=active.filter(Boolean).length;
+  if(n===0) return;
+  const sum=f=>results.reduce((a,r,i)=>active[i]?a+r[f]:a,0);
+  const sums=f=>state.reduce((a,s,i)=>active[i]?a+s[f]:a,0);
+  const comp=sum('compDollar'),credit=sums('lenderCredit'),opd=sum('oldPerDiem');
+  const prep=sum('newPrepaid'),escrow=sums('escrow'),title=sums('title');
+  const adminUw=sums('adminUw'),total=sum('totalCosts');
+  const hardCosts=opd+prep+escrow+title+adminUw-credit;
+  const fmt2=v=>v<0?'($'+Math.abs(Math.round(v)).toLocaleString()+')':'$'+Math.round(v).toLocaleString();
+  const rows=[
+    {label:'NEO Home Loans Broker Fee',      val:comp,   color:'#38bdf8',note:'1.50% per loan, capped at $25K on ClearEdge'},
+    {label:'Old Loan Per Diem',     val:opd,    color:'#7b96b0',note:'15 days interest on current balance'},
+    {label:'New Prepaid Interest',  val:prep,   color:'#7b96b0',note:'15 days interest on new balance'},
+    {label:'Escrow',                val:escrow, color:'#7b96b0',note:'Collective Escrow — $'+Math.round(escrow/n).toLocaleString()+' per loan'},
+    {label:'Title Insurance',       val:title,  color:'#7b96b0',note:'Chicago Title — $'+Math.round(title/n).toLocaleString()+' per loan (ALTA Lender\'s Policy)'},
+    {label:'Admin / Underwriting',  val:adminUw,color:'#7b96b0',note:'Acra $1,895 | ClearEdge $2,174'},
+    {label:'Lender Credit (offset)',val:-credit,color:'#4ade80',note:'Applied against costs'},
+  ];
+  let tbody='';
+  rows.forEach(r=>{tbody+=`<tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 8px;color:${r.color};font-weight:600">${r.label}<br><span style="font-size:8.5px;color:var(--muted);font-weight:400">${r.note}</span></td><td style="padding:7px 8px;text-align:right;color:${r.color};font-weight:600">${fmt2(r.val/n)}</td><td style="padding:7px 8px;text-align:right;color:${r.color};font-weight:700">${fmt2(r.val)}</td></tr>`;});
+  const tb=document.getElementById('costBreakTbody');if(tb)tb.innerHTML=tbody;
+  const ft=document.getElementById('costBreakFoot');
+  if(ft)ft.innerHTML=`<tr style="background:var(--bg3)"><td style="padding:8px;font-weight:800;color:#fff">TOTAL CLOSING COSTS</td><td style="padding:8px;text-align:right;font-weight:800;color:#fbbf24">${fmt2(total/n)}</td><td style="padding:8px;text-align:right;font-weight:800;color:#fbbf24;font-size:13px">${fmt2(total)}</td></tr>`;
+  const el=id=>document.getElementById(id);
+  const totNB=results.reduce((a,r,i)=>active[i]?a+r.newBal:a,0);
+  if(el('cb-comp-total'))el('cb-comp-total').textContent=fmt2(comp);
+  if(el('cb-comp-note'))el('cb-comp-note').textContent='';
+  if(el('cb-hard-total'))el('cb-hard-total').textContent=fmt2(hardCosts);
+  if(el('cb-total'))el('cb-total').textContent=fmt2(total);
+  if(el('cb-total-note'))el('cb-total-note').textContent='';
+}
+// ── BEFOREPRINT: populate summary card ───────────────────────────────────────
+window.addEventListener('beforeprint', function(){
+  const t_totCO = state.reduce((a,s,i)=>active[i]?a+s.cashOut:a,0);
+  const deploy  = parse(document.getElementById('g-deploy').value)/100;
+  const appr    = parse(document.getElementById('g-appr').value)/100;
+  const totPV   = state.reduce((a,s,i)=>active[i]?a+s.propVal:a,0);
+  const results5= PROPS.map((_,i)=>calcProp(i));
+  const totASav = results5.reduce((a,r,i)=>active[i]?a+r.annualSav:a,0);
+  const t_nb    = results5.reduce((a,r)=>a+r.newBal,0);
+
+  const cumCF5   = totASav*5;
+  const coRet5   = t_totCO>0 ? t_totCO*Math.pow(1+deploy,5)-t_totCO : 0;
+  const apprGain5= totPV*Math.pow(1+appr,5)-totPV;
+  const total5   = cumCF5+coRet5+apprGain5;
+
+  const sc = document.getElementById('print-summary-card');
+  if(sc){
+    sc.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px">
+        <div style="border-radius:8px;background:#f0fdf4;padding:16px;border:1px solid #86efac;text-align:center">
+          <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#166534;margin-bottom:8px">5-Year Cash Flow</div>
+          <div style="font-size:26px;font-weight:800;color:#15803d;line-height:1">${fmt(cumCF5)}</div>
+          <div style="font-size:9px;color:#166534;margin-top:6px">${fmt(totASav)}/yr generated</div>
+        </div>
+        <div style="border-radius:8px;background:#f5f3ff;padding:16px;border:1px solid #c4b5fd;text-align:center">
+          <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#6d28d9;margin-bottom:8px">C/O Return — 5yr Compounded</div>
+          <div style="font-size:26px;font-weight:800;color:#6d28d9;line-height:1">${fmt(coRet5)}</div>
+          <div style="font-size:9px;color:#6d28d9;margin-top:6px">on ${fmt(t_totCO)} deployed @ ${(deploy*100).toFixed(0)}%</div>
+        </div>
+        <div style="border-radius:8px;background:#eff6ff;padding:16px;border:1px solid #93c5fd;text-align:center">
+          <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#1e40af;margin-bottom:8px">Portfolio Equity Gain</div>
+          <div style="font-size:26px;font-weight:800;color:#1d4ed8;line-height:1">${fmt(apprGain5)}</div>
+          <div style="font-size:9px;color:#1e40af;margin-top:6px">${(appr*100).toFixed(1)}%/yr on $${Math.round(totPV/1000000)}M</div>
+        </div>
+        <div style="border-radius:8px;background:#0A2540;padding:16px;border:1px solid #5bcbf5;text-align:center">
+          <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#5bcbf5;margin-bottom:8px">Total Wealth Impact</div>
+          <div style="font-size:26px;font-weight:800;color:#fff;line-height:1">${fmt(total5)}</div>
+          <div style="font-size:9px;color:#94a3b8;margin-top:6px">5-year combined</div>
+        </div>
+      </div>
+    `;
+  }
+});
+</script>
+</body>
+</html>
