@@ -1932,36 +1932,40 @@ function copyShareLink(){
 }
 
 
-// ── SAVE & LOAD CONFIG (Netlify Blobs) ───────────────────────────────────────
+// ── SAVE & LOAD CONFIG (JSONBin.io) ─────────────────────────────────────────
+const _BIN  = '6a04c20ac0954111d81bb2ef';
+const _KEY  = '$2a$10$5.JWAfoK8h3giNZ6d4c4I.2lEd2kXEV.twStH6A1O/0jHPmHeXBU6';
+const _URL  = 'https://api.jsonbin.io/v3/b/'+_BIN;
+
 function buildConfigPayload(){
-  const acraI  = PROPS.findIndex((_,i)=>state[i].lender==='Acra');
-  const ceI    = PROPS.findIndex((_,i)=>state[i].lender==='ClearEdge');
-  const lsI    = PROPS.findIndex((_,i)=>state[i].lender==='LendSure');
-  const si     = i => i>=0 ? state[i] : {};
+  const acraI=PROPS.findIndex((_,i)=>state[i].lender==='Acra');
+  const ceI  =PROPS.findIndex((_,i)=>state[i].lender==='ClearEdge');
+  const lsI  =PROPS.findIndex((_,i)=>state[i].lender==='LendSure');
+  const si=i=>i>=0?state[i]:{};
   return {
-    acra_rate:         si(acraI).newRate||6.625,
-    clearedge_rate_rt: DEF_RATES.ClearEdge,
-    clearedge_rate_co: window._ceRateCO||6.75,
-    lendsure_rate:     si(lsI).newRate||6.875,
-    comp_pct:          si(ceI).compPct||1.5,
-    credit_acra:       si(acraI).lenderCredit||0,
-    credit_clearedge:  si(ceI).lenderCredit||1100,
-    credit_lendsure:   si(lsI).lenderCredit||0,
-    escrow:            si(ceI).escrow||1195,
-    title:             si(ceI).title||1005,
-    admin_uw_acra:     si(acraI).adminUw||1895,
-    admin_uw_clearedge:si(ceI).adminUw||2174,
-    admin_uw_lendsure: si(lsI).adminUw||2150,
-    default_prop_value:si(ceI).propVal||2000000,
-    default_prop_tax:  si(ceI).tax||1426,
-    default_insurance: si(ceI).ins||575,
-    default_rent_u1:   si(ceI).u1||4500,
-    default_rent_u2:   si(ceI).u2||3750,
-    default_rent_u3:   si(ceI).u3||3750,
-    appreciation_rate: parseFloat(document.getElementById('g-appr')?.value||5.2),
-    deployment_return: parseFloat(document.getElementById('g-deploy')?.value||8.0),
-    executive_summary: document.getElementById('execSummary')?.textContent||'',
-    rate_quote_date:(()=>{const p=document.querySelector('.hdr-left p');if(!p)return'';const m=p.textContent.match(/Rate Quote:\s*([^|]+)/);return m?m[1].trim():'';})(),
+    acra_rate:          si(acraI).newRate||6.625,
+    clearedge_rate_rt:  DEF_RATES.ClearEdge,
+    clearedge_rate_co:  window._ceRateCO||6.75,
+    lendsure_rate:      si(lsI).newRate||6.875,
+    comp_pct:           si(ceI).compPct||1.5,
+    credit_acra:        si(acraI).lenderCredit||0,
+    credit_clearedge:   si(ceI).lenderCredit||1100,
+    credit_lendsure:    si(lsI).lenderCredit||0,
+    escrow:             si(ceI).escrow||1195,
+    title:              si(ceI).title||1005,
+    admin_uw_acra:      si(acraI).adminUw||1895,
+    admin_uw_clearedge: si(ceI).adminUw||2174,
+    admin_uw_lendsure:  si(lsI).adminUw||2150,
+    default_prop_value: si(ceI).propVal||2000000,
+    default_prop_tax:   si(ceI).tax||1426,
+    default_insurance:  si(ceI).ins||575,
+    default_rent_u1:    si(ceI).u1||4500,
+    default_rent_u2:    si(ceI).u2||3750,
+    default_rent_u3:    si(ceI).u3||3750,
+    appreciation_rate:  parseFloat(document.getElementById('g-appr')?.value||5.2),
+    deployment_return:  parseFloat(document.getElementById('g-deploy')?.value||8.0),
+    executive_summary:  document.getElementById('execSummary')?.textContent||'',
+    rate_quote_date:(()=>{const p=document.querySelector('.hdr-left p');if(!p)return'';const m=p.textContent.match(/Rate Quote:\s*([^|]+)/);return m?m[1].trim():'';})(  ),
     saved_at: new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}),
   };
 }
@@ -1970,14 +1974,16 @@ async function saveConfig(){
   const btn=document.getElementById('saveBtn');
   btn.textContent='Saving...';btn.className='save-btn saving';btn.disabled=true;
   try{
-    const payload=buildConfigPayload();
-    const res=await fetch('/.netlify/functions/save-config',{
-      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),
+    const res=await fetch(_URL,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':_KEY},
+      body:JSON.stringify(buildConfigPayload()),
     });
     if(!res.ok) throw new Error(''+res.status);
     btn.textContent='Published ✓';btn.className='save-btn saved';
     const badge=document.getElementById('config-badge');
-    if(badge){badge.textContent='Published: '+payload.saved_at;badge.style.color='#4ade80';}
+    const ts=new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    if(badge){badge.textContent='Published: '+ts;badge.style.color='#4ade80';}
     setTimeout(()=>{btn.textContent='Save & Publish';btn.className='save-btn';btn.disabled=false;},2500);
   }catch(err){
     btn.textContent='Failed — try again';btn.className='save-btn';btn.disabled=false;
@@ -1987,11 +1993,11 @@ async function saveConfig(){
 
 async function loadSavedConfig(){
   try{
-    const res=await fetch('/.netlify/functions/load-config');
+    const res=await fetch(_URL+'/latest',{headers:{'X-Master-Key':_KEY}});
     if(!res.ok) throw new Error(''+res.status);
     const json=await res.json();
-    if(!json.ok||!json.config) return;
-    const c=json.config;
+    const c=json.record||{};
+    if(!Object.keys(c).length) return;
     const g=(k,fb)=>c[k]!==undefined?Number(c[k]):fb;
     const gs=(k,fb)=>c[k]!==undefined?String(c[k]):fb;
     DEF_RATES.Acra=g('acra_rate',6.625);
