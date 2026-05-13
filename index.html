@@ -27,6 +27,10 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);
 .neo-logo{font-weight:800;font-size:10px;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-top:6px}
 .hdr-right{display:flex;align-items:flex-end;gap:12px}
 .hdr-right .sub{font-size:9px;color:#94a3b8;margin-top:2px;font-weight:200}
+.save-btn{background:#22c55e;color:#fff;border:none;padding:7px 16px;border-radius:5px;font-family:'Montserrat',sans-serif;font-weight:800;font-size:10px;cursor:pointer;letter-spacing:.5px;white-space:nowrap;transition:background .15s}
+.save-btn:hover{background:#16a34a}
+.save-btn.saving{background:#f59e0b;cursor:wait}
+.save-btn.saved{background:#0369a1}
 .print-btn{background:var(--blue);color:var(--navy);border:none;padding:7px 16px;border-radius:5px;font-family:'Montserrat',sans-serif;font-weight:800;font-size:10px;cursor:pointer;letter-spacing:.5px;white-space:nowrap}
 .print-btn:hover{background:#3ab8e8}
 
@@ -423,6 +427,7 @@ tr.tot-row .stk{background:var(--navy)}
   background:rgba(91,203,245,.03);
   border-radius:6px;
 }
+
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -454,6 +459,7 @@ tr.tot-row .stk{background:var(--navy)}
       <div class="sub">Not a loan commitment &nbsp;|&nbsp; For planning purposes only</div>
       <div class="sub" style="margin-top:4px">All costs visible. Move any number. Recalculates instantly.</div>
     </div>
+    <button class="print-btn" id="shareLinkBtn" onclick="copyShareLink()" style="background:#1e3a5f;color:var(--blue);margin-right:6px">Copy Share Link</button><button class="save-btn" id="saveBtn" onclick="saveConfig()">Save &amp; Publish</button>
     <button class="print-btn" onclick="window.print()">Print / PDF</button>
   </div>
 </div>
@@ -1488,11 +1494,25 @@ document.addEventListener('change',e=>{
 // ── LIVE CONFIG FROM ONEDRIVE ─────────────────────────────────────────────────
 async function loadConfig(){
   try{
-    const res=await fetch('/.netlify/functions/config');
-    if(!res.ok) throw new Error(''+res.status);
-    const json=await res.json();
-    if(!json.data) throw new Error('no data');
-    const wb=XLSX.read(json.data,{type:'base64'});
+    let xlsxData=null;
+    // Try Netlify function first (avoids CORS)
+    try{
+      const res=await fetch('/.netlify/functions/config');
+      if(res.ok){const j=await res.json();xlsxData=j.data;}
+    }catch(e){}
+    // Fall back: try direct SharePoint fetch
+    if(!xlsxData){
+      const SP='https://bettermg-my.sharepoint.com/:x:/g/personal/dfillis_better_com/IQCJNtzlnCW2ToaIna3Q2QSpAXqD4sZPDfrEkqHpeJZsfR8?e=K2oex6&download=1';
+      const r2=await fetch(SP,{redirect:'follow'});
+      if(r2.ok){
+        const buf=await r2.arrayBuffer();
+        const bytes=new Uint8Array(buf);
+        let bin='';for(let i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);
+        xlsxData=btoa(bin);
+      }
+    }
+    if(!xlsxData) throw new Error('no data from any source');
+    const wb=XLSX.read(xlsxData,{type:'base64'});
     const ws=wb.Sheets[wb.SheetNames[0]];
     const rows=XLSX.utils.sheet_to_json(ws,{header:1});
     const cfg={};
@@ -1822,6 +1842,187 @@ function renderBeforeAfter(t,results){
 
 
 
+
+
+
+
+// ── URL HASH STATE ────────────────────────────────────────────────────────────
+// Encodes current config into URL hash so the link is shareable with exact state
+
+function encodeStateToHash(){
+  const i0=PROPS.findIndex((_,i)=>state[i].lender==='Acra');
+  const i1=PROPS.findIndex((_,i)=>state[i].lender==='ClearEdge');
+  const i2=PROPS.findIndex((_,i)=>state[i].lender==='LendSure');
+  const cfg={
+    ar: i0>=0?state[i0].newRate:DEF_RATES.Acra,
+    cr: DEF_RATES.ClearEdge,
+    cc: window._ceRateCO||6.75,
+    lr: i2>=0?state[i2].newRate:DEF_RATES.LendSure,
+    cp: i1>=0?state[i1].compPct:1.5,
+    ec: i1>=0?state[i1].escrow:1195,
+    ti: i1>=0?state[i1].title:1005,
+    ua: i0>=0?state[i0].adminUw:1895,
+    uc: i1>=0?state[i1].adminUw:2174,
+    ul: i2>=0?state[i2].adminUw:2150,
+    ka: i0>=0?state[i0].lenderCredit:0,
+    kc: i1>=0?state[i1].lenderCredit:1100,
+    kl: i2>=0?state[i2].lenderCredit:0,
+    dt: document.querySelector('.hdr-left p')?.innerHTML.match(/Rate Quote:\s*([^|<&]+)/)?.[1]?.trim()||'',
+    sm: document.getElementById('execSummary')?.textContent||'',
+    ac: active.map(Number).join(''),
+    co: PROPS.map((_,i)=>state[i].cashOut).join(','),
+  };
+  const hash = btoa(encodeURIComponent(JSON.stringify(cfg)));
+  history.replaceState(null,'','#'+hash);
+}
+
+function decodeHashToState(){
+  const hash = location.hash.slice(1);
+  if(!hash) return false;
+  try{
+    const cfg = JSON.parse(decodeURIComponent(atob(hash)));
+    DEF_RATES.Acra      = cfg.ar||DEF_RATES.Acra;
+    DEF_RATES.ClearEdge = cfg.cr||DEF_RATES.ClearEdge;
+    DEF_RATES.LendSure  = cfg.lr||DEF_RATES.LendSure;
+    window._ceRateCO    = cfg.cc||6.75;
+    PROPS.forEach((_,i)=>{
+      const ldr=state[i].lender;
+      state[i].newRate      = ldr==='Acra'?cfg.ar:ldr==='ClearEdge'?cfg.cr:cfg.lr;
+      state[i].compPct      = cfg.cp||state[i].compPct;
+      state[i].escrow       = cfg.ec||state[i].escrow;
+      state[i].title        = cfg.ti||state[i].title;
+      state[i].adminUw      = ldr==='Acra'?cfg.ua:ldr==='ClearEdge'?cfg.uc:cfg.ul;
+      state[i].lenderCredit = ldr==='Acra'?cfg.ka:ldr==='ClearEdge'?cfg.kc:cfg.kl;
+    });
+    // Cash-out per property
+    if(cfg.co){
+      cfg.co.split(',').forEach((v,i)=>{
+        if(state[i]) state[i].cashOut=parseFloat(v)||0;
+      });
+    }
+    // Active checkboxes
+    if(cfg.ac){
+      cfg.ac.split('').forEach((v,i)=>{active[i]=v==='1';});
+    }
+    // Date
+    if(cfg.dt){
+      const hdrP=document.querySelector('.hdr-left p');
+      if(hdrP) hdrP.innerHTML=hdrP.innerHTML.replace(/Rate Quote:[^|<&]*/,'Rate Quote: '+cfg.dt+' ');
+    }
+    // Summary
+    if(cfg.sm){
+      const el=document.getElementById('execSummary');
+      if(el) el.textContent=cfg.sm;
+    }
+    return true;
+  }catch(e){
+    console.warn('Could not decode URL state:',e.message);
+    return false;
+  }
+}
+
+// Copy link button handler
+function copyShareLink(){
+  encodeStateToHash();
+  navigator.clipboard.writeText(location.href).then(()=>{
+    const btn=document.getElementById('shareLinkBtn');
+    if(btn){btn.textContent='Link Copied!';btn.style.background='#22c55e';
+      setTimeout(()=>{btn.textContent='Copy Share Link';btn.style.background='';},2500);}
+  });
+}
+
+
+// ── SAVE & LOAD CONFIG (Netlify Blobs) ───────────────────────────────────────
+function buildConfigPayload(){
+  const acraI  = PROPS.findIndex((_,i)=>state[i].lender==='Acra');
+  const ceI    = PROPS.findIndex((_,i)=>state[i].lender==='ClearEdge');
+  const lsI    = PROPS.findIndex((_,i)=>state[i].lender==='LendSure');
+  const si     = i => i>=0 ? state[i] : {};
+  return {
+    acra_rate:         si(acraI).newRate||6.625,
+    clearedge_rate_rt: DEF_RATES.ClearEdge,
+    clearedge_rate_co: window._ceRateCO||6.75,
+    lendsure_rate:     si(lsI).newRate||6.875,
+    comp_pct:          si(ceI).compPct||1.5,
+    credit_acra:       si(acraI).lenderCredit||0,
+    credit_clearedge:  si(ceI).lenderCredit||1100,
+    credit_lendsure:   si(lsI).lenderCredit||0,
+    escrow:            si(ceI).escrow||1195,
+    title:             si(ceI).title||1005,
+    admin_uw_acra:     si(acraI).adminUw||1895,
+    admin_uw_clearedge:si(ceI).adminUw||2174,
+    admin_uw_lendsure: si(lsI).adminUw||2150,
+    default_prop_value:si(ceI).propVal||2000000,
+    default_prop_tax:  si(ceI).tax||1426,
+    default_insurance: si(ceI).ins||575,
+    default_rent_u1:   si(ceI).u1||4500,
+    default_rent_u2:   si(ceI).u2||3750,
+    default_rent_u3:   si(ceI).u3||3750,
+    appreciation_rate: parseFloat(document.getElementById('g-appr')?.value||5.2),
+    deployment_return: parseFloat(document.getElementById('g-deploy')?.value||8.0),
+    executive_summary: document.getElementById('execSummary')?.textContent||'',
+    rate_quote_date:(()=>{const p=document.querySelector('.hdr-left p');if(!p)return'';const m=p.textContent.match(/Rate Quote:\s*([^|]+)/);return m?m[1].trim():'';})(),
+    saved_at: new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}),
+  };
+}
+
+async function saveConfig(){
+  const btn=document.getElementById('saveBtn');
+  btn.textContent='Saving...';btn.className='save-btn saving';btn.disabled=true;
+  try{
+    const payload=buildConfigPayload();
+    const res=await fetch('/.netlify/functions/save-config',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),
+    });
+    if(!res.ok) throw new Error(''+res.status);
+    btn.textContent='Published ✓';btn.className='save-btn saved';
+    const badge=document.getElementById('config-badge');
+    if(badge){badge.textContent='Published: '+payload.saved_at;badge.style.color='#4ade80';}
+    setTimeout(()=>{btn.textContent='Save & Publish';btn.className='save-btn';btn.disabled=false;},2500);
+  }catch(err){
+    btn.textContent='Failed — try again';btn.className='save-btn';btn.disabled=false;
+    console.error('Save failed:',err);
+  }
+}
+
+async function loadSavedConfig(){
+  try{
+    const res=await fetch('/.netlify/functions/load-config');
+    if(!res.ok) throw new Error(''+res.status);
+    const json=await res.json();
+    if(!json.ok||!json.config) return;
+    const c=json.config;
+    const g=(k,fb)=>c[k]!==undefined?Number(c[k]):fb;
+    const gs=(k,fb)=>c[k]!==undefined?String(c[k]):fb;
+    DEF_RATES.Acra=g('acra_rate',6.625);
+    DEF_RATES.ClearEdge=g('clearedge_rate_rt',6.625);
+    DEF_RATES.LendSure=g('lendsure_rate',6.875);
+    window._ceRateCO=g('clearedge_rate_co',6.75);
+    PROPS.forEach((_,i)=>{
+      const ldr=state[i].lender;
+      if(!rateOverridden[i]) state[i].newRate=ldr==='Acra'?DEF_RATES.Acra:ldr==='ClearEdge'?DEF_RATES.ClearEdge:DEF_RATES.LendSure;
+      state[i].compPct=g('comp_pct',1.5);
+      state[i].escrow=g('escrow',1195);state[i].title=g('title',1005);
+      state[i].adminUw=ldr==='Acra'?g('admin_uw_acra',1895):ldr==='ClearEdge'?g('admin_uw_clearedge',2174):g('admin_uw_lendsure',2150);
+      state[i].lenderCredit=ldr==='Acra'?g('credit_acra',0):ldr==='ClearEdge'?g('credit_clearedge',1100):g('credit_lendsure',0);
+      state[i].propVal=g('default_prop_value',2000000);
+      state[i].tax=g('default_prop_tax',1426);state[i].ins=g('default_insurance',575);
+      state[i].u1=g('default_rent_u1',4500);state[i].u2=g('default_rent_u2',3750);state[i].u3=g('default_rent_u3',3750);
+    });
+    const apprEl=document.getElementById('g-appr');if(apprEl)apprEl.value=g('appreciation_rate',5.2);
+    const deployEl=document.getElementById('g-deploy');if(deployEl)deployEl.value=g('deployment_return',8.0);
+    const dateQ=gs('rate_quote_date','');
+    if(dateQ){const hdrP=document.querySelector('.hdr-left p');if(hdrP)hdrP.innerHTML=hdrP.innerHTML.replace(/Rate Quote:[^|&]*/,'Rate Quote: '+dateQ+' ');}
+    const sumText=gs('executive_summary','');
+    if(sumText){const el=document.getElementById('execSummary');if(el)el.textContent=sumText;}
+    const savedAt=gs('saved_at','');
+    const badge=document.getElementById('config-badge');
+    if(badge&&savedAt){badge.textContent='Published: '+savedAt;badge.style.color='#4ade80';}
+  }catch(err){
+    console.warn('Load config failed - using defaults:',err.message);
+  }
+}
+
 // ── PATCH RECALCALL TO INCLUDE CHARTS + MAP, THEN INIT ───────────────────────
 // The original recalcAll is in the first script block. We monkey-patch it here
 // so every future call also updates charts and map.
@@ -1866,8 +2067,9 @@ window.recalcAll = function(){
 // since we replaced window.recalcAll above.
 
 // Init everything now that libraries are loaded
+// Decode URL hash first (overrides defaults)
+decodeHashToState();
 window.recalcAll();
-loadConfig().then(()=>window.recalcAll());
 
 
 // ── COST BREAKDOWN CARD ─────────────────────────────────────────────────────
@@ -1946,6 +2148,10 @@ window.addEventListener('beforeprint', function(){
     `;
   }
 });
+
+// Init load saved config
+loadSavedConfig().then(()=>window.recalcAll());
 </script>
+
 </body>
 </html>
