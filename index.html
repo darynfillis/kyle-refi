@@ -1967,6 +1967,13 @@ function buildConfigPayload(){
     executive_summary:  document.getElementById('execSummary')?.textContent||'',
     rate_quote_date:(()=>{const p=document.querySelector('.hdr-left p');if(!p)return'';const m=p.textContent.match(/Rate Quote:\s*([^|]+)/);return m?m[1].trim():'';})(  ),
     saved_at: new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}),
+    // Per-property overrides
+    prop_lenders:    PROPS.map((_,i)=>state[i].lender).join(','),
+    prop_rates:      PROPS.map((_,i)=>state[i].newRate).join(','),
+    prop_rate_ovr:   rateOverridden.map(v=>v?1:0).join(','),
+    prop_cashout:    PROPS.map((_,i)=>state[i].cashOut).join(','),
+    prop_choices:    PROPS.map((_,i)=>state[i].choice).join(','),
+    prop_active:     active.map(v=>v?1:0).join(','),
   };
 }
 
@@ -2020,6 +2027,37 @@ async function loadSavedConfig(){
     });
     const apprEl=document.getElementById('g-appr');if(apprEl)apprEl.value=g('appreciation_rate',5.2);
     const deployEl=document.getElementById('g-deploy');if(deployEl)deployEl.value=g('deployment_return',8.0);
+
+    // Per-property overrides
+    const lenders  = gs('prop_lenders','').split(',');
+    const rates    = gs('prop_rates','').split(',');
+    const rateOvr  = gs('prop_rate_ovr','').split(',');
+    const cashouts = gs('prop_cashout','').split(',');
+    const choices  = gs('prop_choices','').split(',');
+    const actives  = gs('prop_active','').split(',');
+    PROPS.forEach((_,i)=>{
+      if(lenders[i])  state[i].lender     = lenders[i];
+      if(rates[i])    state[i].newRate     = parseFloat(rates[i])||state[i].newRate;
+      if(rateOvr[i])  rateOverridden[i]   = rateOvr[i]==='1';
+      if(cashouts[i]) state[i].cashOut     = parseFloat(cashouts[i])||0;
+      if(choices[i])  state[i].choice      = choices[i];
+      if(actives[i])  active[i]            = actives[i]==='1';
+      // Update lender select style
+      const sel=document.querySelector(`select[data-i="${i}"]`);
+      if(sel){
+        sel.value=state[i].lender;
+        sel.className=state[i].lender==='LendSure'?'lsel ls':state[i].lender==='ClearEdge'?'lsel ce':'lsel';
+      }
+      // Update active checkbox
+      const cb=document.getElementById(`active-${i}`);
+      if(cb) cb.checked=active[i];
+      const row=document.querySelector(`tr[data-i="${i}"]`);
+      if(row) row.classList.toggle('prop-inactive',!active[i]);
+    });
+    // Update totals label
+    const n=active.filter(Boolean).length;
+    const lbl=document.getElementById('tot-active-label');
+    if(lbl) lbl.textContent=`TOTALS (${n} of 8 loans)`;
     const dateQ=gs('rate_quote_date','');
     if(dateQ){const hdrP=document.querySelector('.hdr-left p');if(hdrP)hdrP.innerHTML=hdrP.innerHTML.replace(/Rate Quote:[^|&]*/,'Rate Quote: '+dateQ+' ');}
     const sumText=gs('executive_summary','');
