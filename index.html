@@ -2024,6 +2024,26 @@ async function loadSavedConfig(){
     const savedAt=gs('saved_at','');
     const badge=document.getElementById('config-badge');
     if(badge&&savedAt){badge.textContent='Published: '+savedAt;badge.style.color='#4ade80';}
+
+    // Sync all DOM inputs to match loaded state
+    PROPS.forEach((_,i)=>{
+      const s=state[i];
+      const setInp=(f,v,dollar=true)=>{
+        const el=document.querySelector(`[data-i="${i}"][data-f="${f}"]`);
+        if(el&&el.tagName==='INPUT') el.value=dollar?'$'+Math.round(v).toLocaleString():v;
+      };
+      setInp('newRate',   s.newRate,   false);
+      setInp('compPct',   s.compPct,   false);
+      setInp('lenderCredit', s.lenderCredit);
+      setInp('escrow',    s.escrow);
+      setInp('title',     s.title);
+      setInp('propVal',   s.propVal);
+      setInp('tax',       s.tax);
+      setInp('ins',       s.ins);
+      setInp('u1',        s.u1);
+      setInp('u2',        s.u2);
+      setInp('u3',        s.u3);
+    });
   }catch(err){
     console.warn('Load config failed - using defaults:',err.message);
   }
