@@ -1993,9 +1993,12 @@ async function saveConfig(){
 
 async function loadSavedConfig(){
   try{
+    console.log('Loading config from JSONBin...');
     const res=await fetch(_URL+'/latest',{headers:{'X-Master-Key':_KEY}});
+    console.log('JSONBin response status:', res.status);
     if(!res.ok) throw new Error(''+res.status);
     const json=await res.json();
+    console.log('JSONBin record:', JSON.stringify(json.record).slice(0,200));
     const c=json.record||{};
     if(!Object.keys(c).length) return;
     const g=(k,fb)=>c[k]!==undefined?Number(c[k]):fb;
