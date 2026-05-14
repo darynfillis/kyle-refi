@@ -1540,7 +1540,7 @@ async function loadConfig(){
       if(!rateOverridden[i]) state[i].newRate=ldr==='Acra'?acraRate:ldr==='ClearEdge'?ceRateRT:lsRate;
       state[i].compPct=compPct;state[i].escrow=escrow;state[i].title=title;
       state[i].adminUw=ldr==='Acra'?auAcra:ldr==='ClearEdge'?auCE:auLS;
-      state[i].lenderCredit=ldr==='Acra'?credAcra:ldr==='ClearEdge'?credCE:credLS;
+      state[i].lenderCredit=DEF_CREDITS[i]; // always use per-property defaults
       state[i].propVal=propVal;state[i].tax=propTax;state[i].ins=insurance;
       state[i].u1=u1;state[i].u2=u2;state[i].u3=u3;
     });
@@ -1967,6 +1967,7 @@ function buildConfigPayload(){
     saved_at: new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}),
     // Per-property overrides
     prop_lenders:    PROPS.map((_,i)=>state[i].lender).join(','),
+    prop_credits:    PROPS.map((_,i)=>state[i].lenderCredit).join(','),
     prop_rates:      PROPS.map((_,i)=>state[i].newRate).join(','),
     prop_rate_ovr:   rateOverridden.map(v=>v?1:0).join(','),
     prop_cashout:    PROPS.map((_,i)=>state[i].cashOut).join(','),
@@ -2018,7 +2019,9 @@ async function loadSavedConfig(){
       state[i].compPct=g('comp_pct',1.5);
       state[i].escrow=g('escrow',1195);state[i].title=g('title',1005);
       state[i].adminUw=ldr==='Acra'?g('admin_uw_acra',1895):ldr==='ClearEdge'?g('admin_uw_clearedge',2174):g('admin_uw_lendsure',2150);
-      state[i].lenderCredit=ldr==='Acra'?g('credit_acra',0):ldr==='ClearEdge'?g('credit_clearedge',1100):g('credit_lendsure',0);
+      // Per-property credits (fall back to DEF_CREDITS if not in config)
+      const savedCredits=gs('prop_credits','').split(',');
+      state[i].lenderCredit=savedCredits[i]&&savedCredits[i]!==''?parseFloat(savedCredits[i])||DEF_CREDITS[i]:DEF_CREDITS[i];
       state[i].propVal=g('default_prop_value',2000000);
       state[i].tax=g('default_prop_tax',1426);state[i].ins=g('default_insurance',575);
       state[i].u1=g('default_rent_u1',4500);state[i].u2=g('default_rent_u2',3750);state[i].u3=g('default_rent_u3',3750);
