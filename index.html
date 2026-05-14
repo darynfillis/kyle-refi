@@ -639,17 +639,15 @@ tr.tot-row .stk{background:var(--navy)}
       data-placeholder="Click here to write your executive summary..."
     >Kyle,
 
-The portfolio is carrying a blended rate of 7.655% across $10.87M of debt. The assets are performing and the structure is functional. The cost of capital is not.
+Your portfolio is carrying a blended rate of 7.655% across $10.87M of debt. That gap between what you are paying and what is available today is the problem. Every month it stays open costs you real money.
 
-A straight rate and term refinance reduces the blended rate into the high 6% range and improves cash flow by $6,970 per month, or $83,600 annually. No change to leverage, no complexity.
+Here is what this refinance does. It drops your blended rate into the mid-6% range and generates $6,970 per month in cash flow — $83,600 per year — starting the day we close. No change to leverage. No complexity. Just a lower cost of capital on the debt you already have.
 
-The proposed structure goes further by allocating loans across multiple lenders based on pricing and exposure limits. This achieves a lower cost of capital at the portfolio level than a single-lender execution. Total debt increases modestly due to financed closing costs, but the blended rate lands in the mid-6% range and cash flow improves by $3,951 per month. On top of that, $379,071 in net proceeds comes back at closing after costs are covered, capital you can put to work.
+The structure goes further by allocating each loan to the right lender based on your equity position. That approach achieves better pricing at the portfolio level than any single lender can offer on its own. The result is more cash flow, a cleaner balance sheet, and depending on how you want to structure it, up to $379,071 in net proceeds returned to you at closing.
 
-The structure does three things: lowers the effective cost of capital across all eight loans, maintains interest-only flexibility with short prepayment terms, and distributes lender exposure to achieve better pricing at each position.
+On timing, the analysis is already done. The structure is built. Rates are holding. The next step is a loan application on the six clean loans — the other two we address once the prepayment penalty amounts are confirmed. You do not need to think about which lender goes where or how the costs work. That is handled.
 
-On timing, staying put costs $6,970 per month relative to available execution today. A 60 to 90 day delay is $14,000 to $21,000 in additional interest expense with no structural benefit. A 25 basis point rate improvement would reduce monthly interest cost by approximately $2,200. At that savings rate, it takes 6 to 9 months just to recover the cost of waiting, assuming that improvement materializes and is reflected in DSCR pricing, which is not guaranteed.
-
-The outcome here is driven by structure, not by rate timing. The execution improves the cost of capital immediately and can be adjusted if market conditions shift.
+Once this portfolio closes, it goes into our Mortgage Under Management program. We monitor it continuously. When the market moves to a point where we can reduce your payment again, we reach out. You do not have to watch rates. We do.
 
 Ready when you are.</div>
   </div>
@@ -910,13 +908,17 @@ const DEF_MAX_LTV=[0.70, 0.75, 0.75, 0.75, 0.70, 0.75, 0.75, 0.70];
 const rateOverridden=new Array(8).fill(false);
 
 const DEF_RATES={Acra:6.625,LendSure:6.875,ClearEdge:6.625}; // ClearEdge: 6.625 R&T, 6.875 w/ C/O
-const DEF_CREDITS=[0,1100,1100,1100,0,1100,1100,0]; // ClearEdge flat $1,100, Acra $0
+const DEF_CREDITS=[5050,8455,8455,8455,5050,4788,4780,5050]; // per screenshot
+const DEF_CASHOUTS=[0,0,106000,189000,0,206000,106000,0];           // per screenshot
+const DEF_CHOICES=['roll','roll','co','co','roll','co','co','roll']; // per screenshot
 const DEF_ADMIN_UW={Acra:1895,LendSure:2150,ClearEdge:2174}; // Admin UW per lender
 let state=PROPS.map((p,i)=>({
   lender:DEF_LENDERS[i],
   newRate:DEF_RATES[DEF_LENDERS[i]]||6.625,
   compPct:1.5,
   lenderCredit:DEF_CREDITS[i],
+  cashOut:DEF_CASHOUTS[i],
+  choice:DEF_CHOICES[i],
   escrow:1195,
   title:1005,
   adminUw:DEF_ADMIN_UW[DEF_LENDERS[i]]||0,
@@ -931,7 +933,7 @@ let state=PROPS.map((p,i)=>({
 // Flag to track whether we've applied default cash-out on first load
 let _defaultCOApplied=false;
 // Track which properties are active in the refinance
-let active=[true,true,true,false,true,false,true,true]; // Bellflower(3) and Dashwood(5) off by default
+let active=[true,true,false,false,true,true,true,true]; // Arbor(2) and Bellflower(3) off per screenshot
 
 // ── FORMATTERS ────────────────────────────────────────────────────────────────
 const parse=s=>parseFloat(String(s).replace(/[^0-9.-]/g,''))||0;
@@ -1316,22 +1318,23 @@ function renderProjection(t){
     projSavPrint.innerHTML=ph+`</tbody>`;
   }
 
-  // ── Cash-out deployment table (compounded) ─────────────────────────────────
+  // ── Cash-out deployment table (compounded) — uses NET cash-out after costs ──
   const totCO=state.reduce((a,s,i)=>active[i]?a+s.cashOut:a,0);
+  const totNetCO=t.totCashNet||0; // net proceeds after closing costs
   let coHTML=`<thead><tr><th>Year</th><th>Capital Deployed</th><th>Value (${(deploy*100).toFixed(1)}% cpd)</th><th>Return to Date</th><th>+ Cash Flow</th><th>Combined</th></tr></thead><tbody>`;
-  if(totCO<=0){
+  if(totNetCO<=0){
     coHTML+=`<tr class="empty"><td colspan="6">No cash-out requested. Enter a cash-out amount per property above to model deployment return.</td></tr>`;
   } else {
     let cumSavCO=0;
     for(let y=1;y<=5;y++){
-      // Compound: value of deployed capital after y years
-      const deployedVal=totCO*Math.pow(1+deploy,y);
-      const returnToDate=deployedVal-totCO;
+      // Compound: value of NET deployed capital after y years
+      const deployedVal=totNetCO*Math.pow(1+deploy,y);
+      const returnToDate=deployedVal-totNetCO;
       cumSavCO+=t.totASav;
       const combined=returnToDate+cumSavCO;
       coHTML+=`<tr${y===5?' class="yr5"':''}>`
         +`<td>Year ${y}</td>`
-        +`<td>${y===1?fmt(totCO):'—'}</td>`
+        +`<td>${y===1?fmt(totNetCO):'—'}</td>`
         +`<td>${fmt(deployedVal)}</td>`
         +`<td>${fmt(returnToDate)}</td>`
         +`<td>${fmt(cumSavCO)}</td>`
@@ -1392,7 +1395,8 @@ function onLenderChange(i,lender){
   state[i].lender=lender;
   state[i].maxLtv=lender==='ClearEdge'?0.75:lender==='Acra'?0.70:0.65;
   state[i].adminUw=DEF_ADMIN_UW[lender]||0;
-  state[i].lenderCredit=lender==='ClearEdge'?1100:0;
+  // lenderCredit stays per-property; only reset to DEF if not manually overridden
+  if(state[i].lenderCredit===0||state[i].lenderCredit===1100) state[i].lenderCredit=DEF_CREDITS[i];
   // Only update rate if not manually overridden
   if(!rateOverridden[i]){
     const rate=getLenderRate(lender);
@@ -1555,16 +1559,9 @@ async function loadConfig(){
 
 // ── TABLE BUILT ON LOAD (charts/map init after libraries load below) ──────────
 buildTable();
-// Apply default inactive rows (Bellflower and Dashwood)
-[3,5].forEach(i=>{
-  const row=document.querySelector(`tr[data-i="${i}"]`);
-  if(row) row.classList.add('prop-inactive');
-  const cb=document.getElementById(`active-${i}`);
-  if(cb) cb.checked=false;
-});
-// Set default totals label
+// All 8 active by default
 const initLbl=document.getElementById('tot-active-label');
-if(initLbl) initLbl.textContent='TOTALS (6 of 8 loans)';
+if(initLbl) initLbl.textContent='TOTALS (8 of 8 loans)';
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -1687,10 +1684,11 @@ function renderCharts(t){
   if(coCtx){
     let datasets2;
     if(totCO>0){
-      const coVals=Array.from({length:5},(_,i)=>totCO*Math.pow(1+deploy,i+1)-totCO);
-      const coTotal=Array.from({length:5},(_,i)=>totCO*Math.pow(1+deploy,i+1));
+      const netCO=t.totCashNet||0;
+    const coVals=Array.from({length:5},(_,i)=>netCO*Math.pow(1+deploy,i+1)-netCO);
+      const coTotal=Array.from({length:5},(_,i)=>netCO*Math.pow(1+deploy,i+1));
       datasets2=[
-        {label:'Deployed Capital',data:Array(5).fill(totCO),backgroundColor:'rgba(167,139,250,.15)',borderColor:'rgba(167,139,250,.4)',borderWidth:1.5,borderDash:[4,4],tension:.4,type:'line',fill:false,pointRadius:0},
+        {label:'Net Deployed Capital',data:Array(5).fill(netCO),backgroundColor:'rgba(167,139,250,.15)',borderColor:'rgba(167,139,250,.4)',borderWidth:1.5,borderDash:[4,4],tension:.4,type:'line',fill:false,pointRadius:0},
         {label:'Compounded Value',data:coTotal,borderColor:'#a78bfa',backgroundColor:'rgba(167,139,250,.12)',fill:true,tension:.4,pointBackgroundColor:'#a78bfa',pointRadius:4,type:'line'},
         {label:'Return',data:coVals,backgroundColor:'rgba(34,197,94,.2)',borderColor:'#22c55e',borderWidth:1.5,borderRadius:4},
       ];
@@ -1716,7 +1714,7 @@ function renderCharts(t){
     let cumCF=0;
     const cfData=Array.from({length:5},()=>{cumCF+=t.totASav;return cumCF;});
     const apprGain=Array.from({length:5},(_,i)=>totPropVal*Math.pow(1+appr,i+1)-totPropVal);
-    const coReturn=totCO>0?Array.from({length:5},(_,i)=>totCO*Math.pow(1+deploy,i+1)-totCO):Array(5).fill(0);
+    const coReturn=(t.totCashNet||0)>0?Array.from({length:5},(_,i)=>(t.totCashNet||0)*Math.pow(1+deploy,i+1)-(t.totCashNet||0)):Array(5).fill(0);
     const combined=Array.from({length:5},(_,i)=>cfData[i]+apprGain[i]+coReturn[i]);
     charts.combined=new Chart(combCtx,{
       type:'line',
@@ -2038,7 +2036,17 @@ async function loadSavedConfig(){
     PROPS.forEach((_,i)=>{
       if(lenders[i])  state[i].lender     = lenders[i];
       if(rates[i])    state[i].newRate     = parseFloat(rates[i])||state[i].newRate;
-      if(rateOvr[i])  rateOverridden[i]   = rateOvr[i]==='1';
+      // Only honour rate override if explicitly flagged — reset first, re-apply lender rate
+      rateOverridden[i] = rateOvr[i]==='1';
+      // Re-apply correct effective rate based on lender and cash-out
+      if(!rateOverridden[i]){
+        const ldr = state[i].lender;
+        if(ldr==='ClearEdge'){
+          state[i].newRate = state[i].cashOut>0?(window._ceRateCO||6.75):6.625;
+        } else {
+          state[i].newRate = DEF_RATES[ldr]||state[i].newRate;
+        }
+      }
       if(cashouts[i]) state[i].cashOut     = parseFloat(cashouts[i])||0;
       if(choices[i])  state[i].choice      = choices[i];
       if(actives[i])  active[i]            = actives[i]==='1';
@@ -2076,28 +2084,7 @@ async function loadSavedConfig(){
 const _baseRecalc = window.recalcAll;
 window.recalcAll = function(){
   // On first run, set default cash-out to max for ClearEdge, max for Acra with room
-  if(!_defaultCOApplied){
-    _defaultCOApplied=true;
-    // First pass: calculate max C/O for each property
-    const initResults=PROPS.map((_,i)=>calcProp(i));
-    initResults.forEach((r,i)=>{
-      if(state[i].lender==='ClearEdge'&&r.maxCO>0){
-        // Re-calc maxCO using the C/O rate (6.875%) since cashOut>0 triggers it
-        state[i].cashOut=1; // temp trigger so effectiveRate=6.875 kicks in
-        const r2=calcProp(i);
-        state[i].cashOut=Math.floor(r2.maxCO/1000)*1000;
-        state[i].choice='co';
-      }
-      // Acra: rate & term only, no cash-out
-    });
-    // Sync DOM inputs now that table has been built
-    PROPS.forEach((_,i)=>{
-      const mainInput=document.querySelector(`[data-i="${i}"][data-f="cashOut"]`);
-      if(mainInput) mainInput.value=state[i].cashOut>0?'$'+state[i].cashOut.toLocaleString():'$0';
-      const adjInput=document.getElementById(`coadj-${i}`);
-      if(adjInput) adjInput.value=state[i].cashOut>0?'$'+state[i].cashOut.toLocaleString():'$0';
-    });
-  }
+  // Cash-outs and choices are hardcoded from screenshot defaults — no init logic needed
   const results = PROPS.map((_,i) => calcProp(i));
   results.forEach((r,i) => renderProp(i,r));
   const t = renderTotals(results);
@@ -2183,6 +2170,7 @@ function renderCostBreakdown(results){
 // ── BEFOREPRINT: populate summary card ───────────────────────────────────────
 window.addEventListener('beforeprint', function(){
   const t_totCO = state.reduce((a,s,i)=>active[i]?a+s.cashOut:a,0);
+  const t_netCO = state.reduce((a,s,i)=>active[i]?a+(calcProp(i).cashNet||0):a,0);
   const deploy  = parse(document.getElementById('g-deploy').value)/100;
   const appr    = parse(document.getElementById('g-appr').value)/100;
   const totPV   = state.reduce((a,s,i)=>active[i]?a+s.propVal:a,0);
@@ -2191,7 +2179,7 @@ window.addEventListener('beforeprint', function(){
   const t_nb    = results5.reduce((a,r)=>a+r.newBal,0);
 
   const cumCF5   = totASav*5;
-  const coRet5   = t_totCO>0 ? t_totCO*Math.pow(1+deploy,5)-t_totCO : 0;
+  const coRet5   = t_netCO>0 ? t_netCO*Math.pow(1+deploy,5)-t_netCO : 0;
   const apprGain5= totPV*Math.pow(1+appr,5)-totPV;
   const total5   = cumCF5+coRet5+apprGain5;
 
@@ -2207,7 +2195,7 @@ window.addEventListener('beforeprint', function(){
         <div style="border-radius:8px;background:#f5f3ff;padding:16px;border:1px solid #c4b5fd;text-align:center">
           <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#6d28d9;margin-bottom:8px">C/O Return — 5yr Compounded</div>
           <div style="font-size:26px;font-weight:800;color:#6d28d9;line-height:1">${fmt(coRet5)}</div>
-          <div style="font-size:9px;color:#6d28d9;margin-top:6px">on ${fmt(t_totCO)} deployed @ ${(deploy*100).toFixed(0)}%</div>
+          <div style="font-size:9px;color:#6d28d9;margin-top:6px">on ${fmt(t_netCO)} net proceeds @ ${(deploy*100).toFixed(0)}%</div>
         </div>
         <div style="border-radius:8px;background:#eff6ff;padding:16px;border:1px solid #93c5fd;text-align:center">
           <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#1e40af;margin-bottom:8px">Portfolio Equity Gain</div>
